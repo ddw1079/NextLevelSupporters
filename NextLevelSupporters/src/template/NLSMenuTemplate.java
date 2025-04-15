@@ -1,10 +1,10 @@
 package template;
 
-import javax.swing.JPanel;
-import javax.swing.BorderFactory;
-import javax.swing.JLabel;
 import java.awt.GridLayout;
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
 
 public class NLSMenuTemplate extends JPanel {
 
