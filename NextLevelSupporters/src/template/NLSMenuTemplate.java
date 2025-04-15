@@ -30,10 +30,10 @@ public class NLSMenuTemplate extends JPanel {
 	 *  	- 0 후원자: "반갑습니다 ㅁㅁㅁ 후원자님!" 라벨, 후원내역, 회원정보 수정, 로그아웃 버튼 출력
 	 *  	- 1 수혜자: "반갑습니다 ㅁㅁㅁ 수혜자님!" 라벨, 수혜내역, 회원정보 수정, 로그아웃 버튼 출력
 	 *  	- 2 Admin: "반갑습니다 ㅁㅁㅁ 관리자님!" 라벨, 회원정보 수정?, 로그아웃 버튼 출력
-	 *  Output: 없음.
+	 *  Output: 로그인, 회원가입, 후원내역, 수혜내역 페이지
 	 */
 	public NLSMenuTemplate() {
-		this(TOOL_TIP_TEXT_KEY, ABORT);
+		this("111", 1);
 	}
 	public NLSMenuTemplate(String username, int usertype) {
 		setLayout(new GridLayout(1, 0, 0, 0));
@@ -56,7 +56,7 @@ public class NLSMenuTemplate extends JPanel {
 				panel_1.add(btnRegister);
 				break;
 			case 0:
-				lblShowUser = new JLabel("반갑습니다. " + username + "후원자님!");
+				lblShowUser = new JLabel("반갑습니다. " + username + " 후원자님!");
 				btnCheckHistory = new JButton("후원내역 확인");
 				panel_1.add(btnCheckHistory);
 				btnLogout = new JButton("로그아웃");
