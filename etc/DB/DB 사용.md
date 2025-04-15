@@ -66,3 +66,30 @@ CREATE TABLE HISTORY (
     FOREIGN KEY (RECEIVER_ID) REFERENCES USER_TABLE(ID)
 );
 ```
+
+# 3. Insert Test Data
+
+## 3-1. Insert USER Table
+``` SQL
+-- Type 설명: 0 - 후원자, 1 - 수혜자, 2 - Admin
+INSERT INTO user_table (ID, LOGIN_ID, LOGIN_PW, IS_ACTIVE, NAME, PHONE, ACCOUNT, USER_TYPE)
+VALUES (1, 'sponsor01', 'password123', 'Y', 'John Doe', '010-1234-5678', '123-456-789', 0);
+
+INSERT INTO user_table (ID, LOGIN_ID, LOGIN_PW, IS_ACTIVE, NAME, PHONE, ACCOUNT, USER_TYPE)
+VALUES (2, 'receiver01', 'securepass', 'Y', 'Jane Smith', '010-9876-5432', '987-654-321', 1);
+
+INSERT INTO user_table (ID, LOGIN_ID, LOGIN_PW, IS_ACTIVE, NAME, PHONE, ACCOUNT, USER_TYPE)
+VALUES (3, 'admin01', 'adminsecure', 'Y', 'Admin User', '010-2222-3333', '000-111-222', 2);
+```
+
+## 3-2. Insert RECEIVER Table
+``` SQL
+INSERT INTO receiver (RECEIVER_ID, REASON)
+VALUES (2, 'Educational expenses');
+```
+
+## 3-3. Insert HISTORY Table
+``` SQL
+INSERT INTO history (CREATE_DATE, GIVER_ID, RECEIVER_ID, AMOUNT, MESSAGE, IS_RECEIVED)
+VALUES (SYSDATE, 1, 2, 100000, 'Donation for education', 'N');
+```
