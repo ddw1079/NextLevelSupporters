@@ -52,11 +52,19 @@ public class ReceiverSponseringMainClass extends JFrame {
 	 */
 	
 	// 테스트용 메인 생성자
+	// 추후 삭제 예정
 	public ReceiverSponseringMainClass() {
-		this(1, 2, "준석이", "010-1111-2222", "꽃등심이 먹고싶어요...");
+		this(1, 2);
 	}
 	
-	public ReceiverSponseringMainClass(int GiverID, int ReceiverID, String ReceiverName, String ReceiverPhone, String ReceiverReason) {
+	public ReceiverSponseringMainClass(int giverID, int receiverID) {
+		// 테스트 데이터. 마음대로 수정해도 됩니다.
+//		int giverID = 0;
+//		int receiverID = 1;
+		String receiverName = "굶주리는 준석이";
+		String receiverPhone =  "010-1111-2222";
+		String receiverReason = "꽃등심이 먹고싶어요...";
+		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 490, 450);
 		contentPane = new JPanel();
@@ -69,7 +77,8 @@ public class ReceiverSponseringMainClass extends JFrame {
 		lblNameHeader.setBounds(12, 10, 115, 35);
 		contentPane.add(lblNameHeader);
 		
-		JLabel lblReceiverName = new JLabel(ReceiverName);
+		// 수혜자 이름 출력
+		JLabel lblReceiverName = new JLabel(receiverName);
 		lblReceiverName.setBounds(139, 10, 313, 35);
 		contentPane.add(lblReceiverName);
 		
@@ -77,7 +86,8 @@ public class ReceiverSponseringMainClass extends JFrame {
 		lblPhoneHeader.setBounds(12, 59, 115, 35);
 		contentPane.add(lblPhoneHeader);
 		
-		JLabel lblReceiverPhone = new JLabel(ReceiverPhone);
+		// 수혜자 전화번호 출력
+		JLabel lblReceiverPhone = new JLabel(receiverPhone);
 		lblReceiverPhone.setBounds(139, 59, 313, 35);
 		contentPane.add(lblReceiverPhone);
 		
@@ -85,7 +95,8 @@ public class ReceiverSponseringMainClass extends JFrame {
 		lblReasonHeader.setBounds(12, 104, 115, 35);
 		contentPane.add(lblReasonHeader);
 		
-		JLabel lblReceiverReason = new JLabel(ReceiverReason);
+		// 수혜자 수혜이유 출력
+		JLabel lblReceiverReason = new JLabel(receiverReason);
 		lblReceiverReason.setBounds(139, 104, 313, 35);
 		contentPane.add(lblReceiverReason);
 		
@@ -98,6 +109,7 @@ public class ReceiverSponseringMainClass extends JFrame {
 		lblAmountHeader.setBounds(12, 204, 115, 35);
 		contentPane.add(lblAmountHeader);
 		
+		// 응원 금액 입력필드
 		textFieldAmount = new JTextField();
 		textFieldAmount.setBounds(139, 204, 313, 35);
 		contentPane.add(textFieldAmount);
@@ -107,23 +119,28 @@ public class ReceiverSponseringMainClass extends JFrame {
 		lblMsgHeader.setBounds(12, 249, 115, 35);
 		contentPane.add(lblMsgHeader);
 		
+		// 응원 메시지 입력필드
 		textFieldMsg = new JTextField();
 		textFieldMsg.setColumns(10);
 		textFieldMsg.setBounds(139, 249, 313, 35);
 		contentPane.add(textFieldMsg);
 		
+		// 응원 메시지 보내는 버튼. 보내면 창이 꺼진다.
 		JButton btnSend = new JButton("보내기!!!");
 		btnSend.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				String sendMsg = "후원금과 메시지를 " + ReceiverName + " 에게 송부합니다.";
+				String sendMsg = "후원금과 메시지를 " + receiverName + " 에게 송부합니다.";
 				int amount = Integer.parseInt(textFieldAmount.getText());
 				sendMsg += "\n후원 금액: " + amount;
 				String msg = textFieldMsg.getText();
 				sendMsg += "\n응원 메시지: " + msg;
 				sendMsg += "\n\n이렇게 보낼까요?";
 				int result = JOptionPane.showConfirmDialog(btnSend, sendMsg, "응원 메시지를 보내요", JOptionPane.YES_NO_OPTION);
-				
+				if(result == JOptionPane.YES_OPTION) {
+					JOptionPane.showConfirmDialog(btnSend, receiverName + " 에게 후원해주셔서 감사드립니다.\n후원 내역은 후원 내역 페이지에서 확인하실 수 있습니다.", "후원에 감사드립니다.", JOptionPane.YES_OPTION);
+					dispose();
+				}
 			}
 		});
 		btnSend.addActionListener(new ActionListener() {
@@ -133,12 +150,12 @@ public class ReceiverSponseringMainClass extends JFrame {
 		btnSend.setBounds(12, 294, 201, 99);
 		contentPane.add(btnSend);
 		
+		// 닫기 버튼
 		JButton btnCancel = new JButton("취소...");
 		btnCancel.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				dispose();
-				System.exit(0);
 			}
 		});
 		btnCancel.setBounds(251, 294, 201, 99);

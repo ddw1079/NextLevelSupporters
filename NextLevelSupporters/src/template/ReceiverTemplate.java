@@ -7,10 +7,14 @@ import javax.swing.JLabel;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.GridLayout;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import giver.ReceiverSponseringMainClass;
 
 public class ReceiverTemplate extends JPanel {
 
 	private static final long serialVersionUID = 1L;
+	protected static final String ReceiverSponseringMainClass = null;
 	private static JButton btnReceiverName;
 	private static JPanel panel;
 	private static JLabel lblReceiverReason;
@@ -26,12 +30,23 @@ public class ReceiverTemplate extends JPanel {
 	 * Output: (클릭한 수혜자의 )수혜자 후원 페이지
 	 */
 	public ReceiverTemplate() {
-		this("굶주리는 준석이", "배고픔에 잠 못 이루는 밤… 작은 도움 하나가 제게 희망이 됩니다.");
+		this(0, 1);
 	}
 	
-	public ReceiverTemplate(String ReceiverName, String ReceiverReason) {
+	public ReceiverTemplate(int giverID, int receiverID) {
+//		int giverID = 0;
+//		int ReceiverID = 1;
+		String receiverName = "굶주리는 준석이";
+		String receiverReason = "배고픔에 잠 못 이루는 밤… 작은 도움 하나가 제게 희망이 됩니다.";
 		
-		btnReceiverName = new JButton(ReceiverName);
+		btnReceiverName = new JButton(receiverName);
+		btnReceiverName.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				ReceiverSponseringMainClass rsmc = new ReceiverSponseringMainClass(1, 2);
+				rsmc.setVisible(true);
+			}
+		});
 		btnReceiverName.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 			}
@@ -46,7 +61,7 @@ public class ReceiverTemplate extends JPanel {
 		add(panel);
 		panel.setLayout(new GridLayout(0, 1, 0, 0));
 		
-		lblReceiverReason = new JLabel(ReceiverReason);
+		lblReceiverReason = new JLabel(receiverReason);
 		panel.add(lblReceiverReason);
 
 	}
