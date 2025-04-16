@@ -1,11 +1,14 @@
 package giver;
 
 import java.awt.EventQueue;
+import java.util.ArrayList;
 
+import javax.swing.DefaultListModel;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import template.NLSMenuTemplate;
+import template.ReceiverTemplate;
 import javax.swing.JScrollPane;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -40,9 +43,6 @@ public class GiverMainClass extends JFrame {
 		});
 	}
 
-	/**
-	 * Create the frame.
-	 */
 	public GiverMainClass() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 693, 490);
@@ -58,10 +58,21 @@ public class GiverMainClass extends JFrame {
 		
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setBounds(12, 96, 653, 345);
+		
+		
+		ArrayList <ReceiverTemplate> RTAL = new ArrayList<>();
+		RTAL.add(new ReceiverTemplate());
+		RTAL.add(new ReceiverTemplate());
+		
+		DefaultListModel<ReceiverTemplate> listModel = new DefaultListModel<>();
+        for (ReceiverTemplate item : RTAL) {
+            listModel.addElement(item);
+        }
+        
+		JList<ReceiverTemplate> list = new JList<>(listModel);
+		scrollPane.setViewportView(list);
 		contentPane.add(scrollPane);
 		
-		JList list = new JList();
-		scrollPane.setViewportView(list);
 		
 		JPanel panel = new JPanel();
 		panel.setBounds(12, 61, 651, 25);

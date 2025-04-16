@@ -36,19 +36,24 @@ public class NLSMenuTemplate extends JPanel {
 		this("111", 1);
 	}
 	public NLSMenuTemplate(String username, int usertype) {
+		// GRID LAYOUT 선언
 		setLayout(new GridLayout(1, 0, 0, 0));
 		
+		// 로그인한 회원 정보 들어갈 라벨 생성
 		panel = new JPanel();
 		panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 		add(panel);
 		panel.setLayout(new GridLayout(0, 1, 0, 0));
 		
+		// 버튼 들어갈 라벨 선언
 		panel_1 = new JPanel();
 		add(panel_1);
 		panel_1.setLayout(new GridLayout(1, 0, 0, 0));
 		
+		// 생성자로 가져온 유저 타입에 따라 라벨과 버튼을 다르게 생성한다.
 		switch (usertype) {
 			case -1:
+				// 타입 -1: 로그인 정보 없음
 				lblShowUser = new JLabel("안녕하세요! 로그인해주세요");
 				btnLogin = new JButton("로그인");
 				panel_1.add(btnLogin);
@@ -56,6 +61,7 @@ public class NLSMenuTemplate extends JPanel {
 				panel_1.add(btnRegister);
 				break;
 			case 0:
+				// 타입 0: 후원자 로그인
 				lblShowUser = new JLabel("반갑습니다. " + username + " 후원자님!");
 				btnCheckHistory = new JButton("후원내역 확인");
 				panel_1.add(btnCheckHistory);
@@ -63,6 +69,7 @@ public class NLSMenuTemplate extends JPanel {
 				panel_1.add(btnLogout);
 				break;
 			case 1:
+				// 타입 1: 수혜자 로그인
 				lblShowUser = new JLabel("반갑습니다. " + username + " 수혜자님!");
 				btnCheckHistory = new JButton("수혜내역 확인");
 				panel_1.add(btnCheckHistory);
@@ -70,11 +77,13 @@ public class NLSMenuTemplate extends JPanel {
 				panel_1.add(btnLogout);
 				break;
 			case 2:
+				// 타입 2: Admin 관리자 로그인
 				lblShowUser = new JLabel("반갑습니다. " + username + " 관리자님!");
 				btnLogout = new JButton("로그아웃");
 				panel_1.add(btnLogout);
 				break;
 			default:
+				// 여기는 들어오면 안됨. 원활한 진행을 위해 오류는 내지 않고 콘솔에 왜 이런 값이 들어왔는지 유저타입 찍어줌.
 				System.out.println("Menubar default executed. usertype? " + usertype);
 				break;
 		}
