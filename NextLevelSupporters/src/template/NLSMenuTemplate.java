@@ -1,10 +1,15 @@
 package template;
 
 import java.awt.GridLayout;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import giver.GiverMainClass;
+import giver.GiverHistoryMainClass;
 
 public class NLSMenuTemplate extends JPanel {
 
@@ -12,10 +17,15 @@ public class NLSMenuTemplate extends JPanel {
 	private static JPanel panel;
 	private static JPanel panel_1;
 	private static JLabel lblShowUser;
+	private static JButton btnSponsering;
 	private static JButton btnCheckHistory;
 	private static JButton btnLogin;
 	private static JButton btnLogout;
 	private static JButton btnRegister;
+	
+	private static GiverMainClass gmc;
+	private static GiverHistoryMainClass ghmc;
+
 
 	/**
 	 * 파일 설명: 메인 메뉴 템플릿
@@ -63,7 +73,37 @@ public class NLSMenuTemplate extends JPanel {
 			case 0:
 				// 타입 0: 후원자 로그인
 				lblShowUser = new JLabel("반갑습니다. " + username + " 후원자님!");
+				btnSponsering = new JButton("후원하기");
+				btnSponsering.addMouseListener(new MouseAdapter() {
+					@Override
+					public void mouseClicked(MouseEvent e) {
+						// 아마 후원자 아이디와 타입을 넘겨주어야 할 것 같음
+						// 여기서 맨 처음 창이 사라지지 않는 이슈 있음. 원인이 뭘까??
+						if(gmc == null) {
+							gmc = new GiverMainClass();
+						}
+						if(ghmc != null) {
+							ghmc.setVisible(false);
+						}
+						gmc.setVisible(true);
+					}
+				});
+				
+				panel_1.add(btnSponsering);
 				btnCheckHistory = new JButton("후원내역 확인");
+				btnCheckHistory.addMouseListener(new MouseAdapter() {
+					@Override
+					public void mouseClicked(MouseEvent e) {
+						// 아마 후원자 아이디와 타입을 넘겨주어야 할 것 같음
+						if(ghmc == null) {
+							ghmc = new GiverHistoryMainClass();
+						}
+						if(gmc != null) {
+							gmc.setVisible(false);
+						}
+						ghmc.setVisible(true);
+					}
+				});
 				panel_1.add(btnCheckHistory);
 				btnLogout = new JButton("로그아웃");
 				panel_1.add(btnLogout);
@@ -71,7 +111,9 @@ public class NLSMenuTemplate extends JPanel {
 			case 1:
 				// 타입 1: 수혜자 로그인
 				lblShowUser = new JLabel("반갑습니다. " + username + " 수혜자님!");
-				btnCheckHistory = new JButton("수혜내역 확인");
+				btnSponsering = new JButton("받은 후원");
+				panel_1.add(btnSponsering);
+				btnCheckHistory = new JButton("수혜 내역 확인");
 				panel_1.add(btnCheckHistory);
 				btnLogout = new JButton("로그아웃");
 				panel_1.add(btnLogout);
