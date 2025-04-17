@@ -46,6 +46,7 @@ public class GiverHistoryMainClass extends JFrame {
 		});
 	}
 
+	
 	/**
 	 * Create the frame.
 	 */
@@ -67,6 +68,10 @@ public class GiverHistoryMainClass extends JFrame {
 		NLSMenuTemplate menuTemplate = new NLSMenuTemplate("김희상", 0);
 		menuTemplate.setBounds(12, 10, 938, 41);
 		contentPane.add(menuTemplate);
+		
+		GiverHistoryTable giverHistoryTable = new GiverHistoryTable();
+		giverHistoryTable.setBounds(48, 112, 873, 335);
+		contentPane.add(giverHistoryTable);
 		
 		
 	}
