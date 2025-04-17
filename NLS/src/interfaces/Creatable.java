@@ -1,6 +1,8 @@
 package interfaces;
 
+import java.sql.SQLException;
+
 public interface Creatable<T> {
 
-    public void create();
+    public void create() throws SQLException;
 }
