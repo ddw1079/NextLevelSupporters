@@ -1,11 +1,11 @@
 package template;
 
-import dao.BaseDAO;
 import java.awt.*;
 import java.lang.reflect.Field;
 import java.util.List;
 import javax.swing.*;
 import vo.BaseVO;
+import interfaces.Readable;
 
 /**
  * input: BaseDAO를 상속받는 DAO output: JPanel(스크롤 가능)을 리턴하는데, 그 안에 DAO로 가져온 VO를 하나의
@@ -14,13 +14,13 @@ import vo.BaseVO;
  */
 class JListStudy extends JPanel {
 
-    private BaseDAO<BaseVO> DAO;
+    private Readable<BaseVO> DAO;
 
-    public JListStudy(BaseDAO<BaseVO> DAO) {
+    public JListStudy(Readable<BaseVO> DAO) {
         this.DAO = DAO;
 
 // 2. DAO를 통해 데이터베이스에서 모든 아이템을 가져옴
-        List<BaseVO> items = DAO.getAllItems();
+        List<BaseVO> items = DAO.read();
         // List 인터페이스 중에서 ArrayList에 담아서 옴
 
 // 3. JList에 데이터를 표시하기 위한 모델 생성
