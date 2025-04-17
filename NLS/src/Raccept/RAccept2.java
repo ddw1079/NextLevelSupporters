@@ -26,7 +26,11 @@ import javax.swing.JScrollBar;
 
 import template.NLSMenuTemplate;
 import javax.swing.JScrollPane;
+
+import giver.GiverHistoryVO;
+
 import java.awt.SystemColor;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.awt.Dimension;
 
@@ -35,7 +39,9 @@ public class RAccept2 extends JFrame {
     private JPanel contentPane;
 
     // 생성자: 수혜자 후원금 내역 수락 페이지를 초기화
-    public RAccept2() {
+    public RAccept2() throws SQLException {
+    	
+    	int user_id = 1;
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setBounds(100, 100, 706, 477);
 
@@ -70,8 +76,13 @@ public class RAccept2 extends JFrame {
         contentPane.add(scrollPane);
 
         // 후원 내역 리스트 (임시 데이터)
-        ArrayList<Temlist2> donationList = createDonationList();
-
+        ReceiverHistoryDao rdao = new ReceiverHistoryDao();
+        ArrayList<ReceiverHistoryVo> List = rdao.read(user_id);
+     
+        ArrayList<Temlist2> donationList = createDonationList(List);
+  
+        
+        
         // 리스트 패널에 후원 내역 항목 추가
         donationList.forEach(item -> {
             item.setBackground(SystemColor.menu); // 배경 색상 설정
@@ -80,19 +91,31 @@ public class RAccept2 extends JFrame {
             listPanel.add(item);
             
         });
-    }
-    
+    } 
+    	    // 후원 내역 리스트 생성
+    	    private ArrayList<Temlist2> createDonationList(ArrayList<ReceiverHistoryVo> volist) {
+    	        ArrayList<Temlist2> donationList = new ArrayList<>();
+    	        for (ReceiverHistoryVo temp : volist) {
+    	            donationList.add(new Temlist2(
+    	                temp.getGiverName(),
+    	                String.valueOf(temp.getAmount()),
+    	                temp.getCreate_date().toString(),
+    	                temp.getMessage()
+    	            ));
+    	        }
+    	        return donationList;
+    	    }
+	
 
-    // 임시 후원 내역 데이터를 생성 메서드
-    private ArrayList<Temlist2> createDonationList() {
-        ArrayList<Temlist2> donationList = new ArrayList<>();
-        donationList.add(new Temlist2("홍길동", "10,000", "2025.04.10", "항상 응원합니다!\n건강하세요 :)"));
-        donationList.add(new Temlist2("이순신", "20,000", "2025.04.11", "정말 감사합니다!\n힘내세요~"));
-        donationList.add(new Temlist2("세종대왕", "15,000", "2025.04.12", "늘 응원합니다 :)"));
-        return donationList;
-    }
+	// 테이블 데이터와 컬럼 이름 설정
+    String[] columnNames = {"ID", "수혜자명", "일자", "금액", "메세지"};
+
+    ArrayList<Object[]> dataList = new ArrayList<>();
+
 
     public static void main(String[] args) {
+    	int user_id = 1;
+    	
         EventQueue.invokeLater(() -> {
             try {
                 RAccept2 frame = new RAccept2();
