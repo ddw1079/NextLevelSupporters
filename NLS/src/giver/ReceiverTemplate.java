@@ -1,4 +1,4 @@
-package template;
+package giver;
 
 import javax.swing.JPanel;
 import javax.swing.BorderFactory;
@@ -9,7 +9,6 @@ import java.awt.event.ActionEvent;
 import java.awt.GridLayout;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import giver.ReceiverSponseringMainClass;
 
 public class ReceiverTemplate extends JPanel {
 
