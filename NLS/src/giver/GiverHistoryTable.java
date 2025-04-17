@@ -1,12 +1,16 @@
 package giver;
 
 import java.awt.BorderLayout;
+import java.sql.SQLException;
+import java.util.ArrayList;
 
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
+import giver.GiverHistoryDAO;
+import giver.GiverHistoryVO;
 
 public class GiverHistoryTable extends JPanel {
 
@@ -15,18 +19,38 @@ public class GiverHistoryTable extends JPanel {
 	/**
 	 * 파일 설명: 후원자의 후원 내역 테이블
 	 * 파일 상세: 후원자의 후원 내역을 출력한다.
+	 * @throws SQLException 
+	 * @throws ClassNotFoundException 
 	 */
-	public GiverHistoryTable() {
-
+	public GiverHistoryTable() throws ClassNotFoundException, SQLException {
+		this(1);
+	}
+	public GiverHistoryTable(int user_id) throws SQLException, ClassNotFoundException {
+		if(user_id == -1) {
+			System.out.println("기본 클래스 선언됨.");
+		}
         setLayout(new BorderLayout());  // BorderLayout을 사용하여 레이아웃 관리
-
+        GiverHistoryDAO ghdao = new GiverHistoryDAO();
+        ArrayList<GiverHistoryVO> ghList = ghdao.read(user_id);
         // 테이블 데이터와 컬럼 이름 설정
         String[] columnNames = {"ID", "수혜자명", "일자", "금액", "메세지"};
-        Object[][] data = {
-            {1, "홍길동", "2025-04-16", 10000, "항상 응원합니다! 건강하세요"},
-            {2, "김철수", "2025-04-15", 5000, "힘내세요"},
-            {3, "이영희", "2025-04-14", 1500, "도움이 되길 바랍니다."}
-        };
+
+        ArrayList<Object[]> dataList = new ArrayList<>();
+        
+        
+        for(GiverHistoryVO temp: ghList) {
+        	// 여기에 데이터를 넣고싶어...
+        	Object[] newRow = {
+        		temp.getIdx(),
+        		temp.getReceiver_id(),
+        		temp.getCreate_date(),
+        		temp.getAmount(),
+        		temp.getMessage()
+        	};
+        	dataList.add(newRow);
+        }
+        Object[][] data = dataList.toArray(new Object[0][]);
+        
 
         // DefaultTableModel을 이용하여 테이블 모델 설정
         DefaultTableModel model = new DefaultTableModel(data, columnNames);

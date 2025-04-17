@@ -9,6 +9,8 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 import java.awt.Font;
+import java.sql.SQLException;
+
 import template.NLSMenuTemplate;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -49,8 +51,10 @@ public class GiverHistoryMainClass extends JFrame {
 	
 	/**
 	 * Create the frame.
+	 * @throws SQLException 
+	 * @throws ClassNotFoundException 
 	 */
-	public GiverHistoryMainClass() {
+	public GiverHistoryMainClass() throws ClassNotFoundException, SQLException {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 978, 507);
 		contentPane = new JPanel();
