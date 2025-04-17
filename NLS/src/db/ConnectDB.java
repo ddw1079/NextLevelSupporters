@@ -11,7 +11,7 @@ public class ConnectDB {
 		return con;
 	}
 	
-	public ConnectDB throws SQLException, ClassNotFoundException {
+	public ConnectDB() throws SQLException, ClassNotFoundException {
 		Class.forName("oracle.jdbc.driver.OracleDriver");
 		con = DriverManager.getConnection("jdbc:oracle:thin:@127.0.0.1:1521:xe","nlsdba","nextlevelsupporters");
 	}

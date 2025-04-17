@@ -11,7 +11,7 @@ import java.sql.Date;
  * */
 
 public class GiverHistoryVO {
-	private int id;
+	private int idx;
 	private Date create_date;
 	private int giver_id;
 	private int receiver_id;
@@ -19,9 +19,9 @@ public class GiverHistoryVO {
 	private String message;
 	private boolean is_received;
 	public GiverHistoryVO() {}
-	public GiverHistoryVO (int id, Date create_date, int giver_id, int receiver_id, int amount, String message, boolean is_received) {
+	public GiverHistoryVO (int idx, Date create_date, int giver_id, int receiver_id, int amount, String message, boolean is_received) {
 		super();
-		this.setId(id);
+		this.setIdx(idx);
 		this.setCreate_date(create_date);
 		this.setGiver_id(giver_id);
 		this.setReceiver_id(receiver_id);
@@ -31,11 +31,11 @@ public class GiverHistoryVO {
 	}
 	
 	
-	public int getId() {
-		return id;
+	public int getIdx() {
+		return idx;
 	}
-	public void setId(int id) {
-		this.id = id;
+	public void setIdx(int idx) {
+		this.idx = idx;
 	}
 	public Date getCreate_date() {
 		return create_date;
