@@ -1,6 +1,7 @@
 package giver;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -39,28 +40,47 @@ public class GiverHistoryDAO implements Readable{
 	public ArrayList<GiverHistoryVO> getHistoryByGiverID(int giverID) {
 		ArrayList<GiverHistoryVO> ghList = new ArrayList<>();
 		
-		
 		return null;
 	}
 
 	@Override
-	public ArrayList<GiverHistoryVO> read() {
+	public List read() throws SQLException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	@Override
+	public ArrayList<GiverHistoryVO> read(int targetGiverID) throws SQLException {
 		// TODO Auto-generated method stub
 		ArrayList<GiverHistoryVO> ghList = new ArrayList<>();
 		String sql = "SELECT "
-				+ "ROW_NUMBER() OVER (ORDER BY ) as id, "
+				+ "ROW_NUMBER() OVER (ORDER BY ) as idx, "
 				+ "CREATE_DATE, "
 				+ "GIVER_ID, "
 				+ "RECEIVER_ID, "
 				+ "AMOUNT, "
 				+ "MESSAGE, "
-				+ "IS_RECEIVED "
-				+ "FROM HISTORY";
+				+ "CASE WHEN IS_RECEIVED = 'Y' THEN 1 ELSE 0 END as is_received"
+				+ "FROM HISTORY "
+				+ "WHERE GIVER_ID = ?";
+		ps.setInt(1, targetGiverID);
+		ps = con.prepareStatement(sql);
+		rs = ps.executeQuery();
+		while(rs.next()) {
+			int idx = rs.getInt("idx");
+			Date create_date = rs.getDate("CREATE_DATE");
+			int giver_id = rs.getInt("GIVER_ID");
+			int receiver_id = rs.getInt("RECEIVER_ID");
+			int amount = rs.getInt("AMOUNT");
+			String message = rs.getString("MESSAGE");
+			boolean is_received = (rs.getInt("is_received") == 1);
+			
+			GiverHistoryVO ghv = new GiverHistoryVO(idx, create_date, giver_id, receiver_id, amount, message, is_received);
+			ghList.add(ghv);
+		}
 		
-		
-		
-		return null;
+		return ghList;
 	}
-	
-	
+
+
 }
