@@ -3,6 +3,7 @@ package template;
 import java.awt.GridLayout;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.sql.SQLException;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -103,7 +104,15 @@ public class NLSMenuTemplate extends JPanel {
 					public void mouseClicked(MouseEvent e) {
 						// 아마 후원자 아이디와 타입을 넘겨주어야 할 것 같음
 						if(ghmc == null) {
-							ghmc = new GiverHistoryMainClass();
+							try {
+								ghmc = new GiverHistoryMainClass();
+							} catch (ClassNotFoundException e1) {
+								// TODO Auto-generated catch block
+								e1.printStackTrace();
+							} catch (SQLException e1) {
+								// TODO Auto-generated catch block
+								e1.printStackTrace();
+							}
 						}
 						if(gmc != null) {
 							gmc.setVisible(false);
