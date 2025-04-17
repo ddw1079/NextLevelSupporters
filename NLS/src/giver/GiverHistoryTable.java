@@ -21,7 +21,7 @@ public class GiverHistoryTable extends JPanel {
         setLayout(new BorderLayout());  // BorderLayout을 사용하여 레이아웃 관리
 
         // 테이블 데이터와 컬럼 이름 설정
-        String[] columnNames = {"ID", "수혜자명", "일시", "금액", "메세지"};
+        String[] columnNames = {"ID", "수혜자명", "일자", "금액", "메세지"};
         Object[][] data = {
             {1, "홍길동", "2025-04-16", 10000, "항상 응원합니다! 건강하세요"},
             {2, "김철수", "2025-04-15", 5000, "힘내세요"},

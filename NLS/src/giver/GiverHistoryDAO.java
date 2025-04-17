@@ -1,0 +1,66 @@
+package giver;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+
+import interfaces.Readable;
+
+import db.ConnectDB;
+
+
+/* **
+ * 파일 설명: 후원자 후원내역에서 사용할 DB Access Object.
+ * 파일 상세: 후원자 후원내역에서 테이블을 출력하기 위한 DAO
+ *  - 후원내역 테이블은 History 테이블의 후원자를 로그인한 사용자의 ID로 검색하여 출력한다. 
+ *  	- ID, 수혜자명, 일자, 금액, 메시지로 되어있다.
+ *  	- ID: 숫자, 자동 increment
+ *  	- 수혜자명: 후원한 수혜자 명
+ *  	- 일자: 후원한 날짜
+ *  	- 금액: 후원한 금액
+ *  	- 메시지: 후원 시 보낸 메시지
+ *  Input: Select id 수혜자명 일자 금액 메시지 from
+ * 	Output: 후원내역 List
+ * 
+ * */
+
+public class GiverHistoryDAO implements Readable{
+	private Connection con;
+	PreparedStatement ps = null;
+	ResultSet rs = null;
+	
+	public GiverHistoryDAO() throws ClassNotFoundException, SQLException {
+		con = new ConnectDB().getConnection();
+	}
+	
+	public ArrayList<GiverHistoryVO> getHistoryByGiverID(int giverID) {
+		ArrayList<GiverHistoryVO> ghList = new ArrayList<>();
+		
+		
+		return null;
+	}
+
+	@Override
+	public ArrayList<GiverHistoryVO> read() {
+		// TODO Auto-generated method stub
+		ArrayList<GiverHistoryVO> ghList = new ArrayList<>();
+		String sql = "SELECT "
+				+ "ROW_NUMBER() OVER (ORDER BY ) as id, "
+				+ "CREATE_DATE, "
+				+ "GIVER_ID, "
+				+ "RECEIVER_ID, "
+				+ "AMOUNT, "
+				+ "MESSAGE, "
+				+ "IS_RECEIVED "
+				+ "FROM HISTORY";
+		
+		
+		
+		return null;
+	}
+	
+	
+}
