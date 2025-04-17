@@ -13,6 +13,7 @@
 package Rlist;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.SystemColor;
@@ -28,6 +29,8 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JToolBar;
 import template.NLSMenuTemplate;
+
+
 /*
 import java.util.ArrayList;
 import java.awt.Dimension;
@@ -52,16 +55,11 @@ public class RAccept3list extends JFrame {//RAccept2 클래스는 후원 내역�
 		lblTitle.setBounds(27, 64, 311, 30);
 		contentPane.add(lblTitle);
 		
-		// *후원 항목 하나를 표시* (Temlist3 클래스 템플릿 사용)
-		Temlist3 list = new Temlist3();
-		list.setBackground(SystemColor.menu);
-		list.setBounds(27, 104, 619, 334); // 위치/크기 조정
-		contentPane.add(list);
-		
 		// *상단 메뉴바* (NLSMenuTemplate 템플릿 사용)
 		NLSMenuTemplate menuTemplate = new NLSMenuTemplate("김성진" , 1);
 		menuTemplate.setBounds(0, 0, 690, 42);
 		contentPane.add(menuTemplate);
+		
 		
 		//JScrollPane 안에 들어갈 listPanel을 생성 → 수직 박스 레이아웃 지정.
 		// 후원 항목들을 담을 리스트 패널 생성
@@ -72,16 +70,13 @@ public class RAccept3list extends JFrame {//RAccept2 클래스는 후원 내역�
 		
 		// 스크롤 영역 생성 및 패널 연결
 		JScrollPane scrollPane = new JScrollPane(listPanel);
+		
+		// *후원 항목 하나를 표시* (Temlist3 클래스 템플릿 사용)
+		Temlist3 list = new Temlist3();
+		listPanel.add(list);
+		list.setBackground(SystemColor.menu);
 		scrollPane.setBounds(27, 102, 637, 336);
 		contentPane.add(scrollPane);
-		scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-		
-		JToolBar toolBar = new JToolBar();
-		toolBar.setBounds(543, 64, 119, 30);
-		contentPane.add(toolBar);
-		
-		JLabel lblNewLabel = new JLabel(" 내역 조회 ");
-		toolBar.add(lblNewLabel);
 		
 		JButton btnNewButton = new JButton("");
 		btnNewButton.addMouseListener(new MouseAdapter() {
@@ -108,8 +103,6 @@ public class RAccept3list extends JFrame {//RAccept2 클래스는 후원 내역�
 		        		        		    
 			}
 		});
-		btnNewButton.setIcon(new ImageIcon(RAccept3list.class.getResource("/IMAGES/30.png")));
-		toolBar.add(btnNewButton);
 	
 	}
 

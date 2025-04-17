@@ -6,10 +6,17 @@ import java.awt.event.MouseEvent;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
+
 import giver.GiverMainClass;
 import giver.GiverHistoryMainClass;
+import Rlist.RAccept3list;
+import Raccept.RAccept2;
+
+
 
 public class NLSMenuTemplate extends JPanel {
 
@@ -108,16 +115,47 @@ public class NLSMenuTemplate extends JPanel {
 				btnLogout = new JButton("로그아웃");
 				panel_1.add(btnLogout);
 				break;
-			case 1:
-				// 타입 1: 수혜자 로그인
-				lblShowUser = new JLabel("반갑습니다. " + username + " 수혜자님!");
-				btnSponsering = new JButton("받은 후원");
-				panel_1.add(btnSponsering);
-				btnCheckHistory = new JButton("수혜 내역 확인");
-				panel_1.add(btnCheckHistory);
-				btnLogout = new JButton("로그아웃");
-				panel_1.add(btnLogout);
-				break;
+				
+				
+			case 1:// 타입 1: 수혜자 로그인
+				
+			    lblShowUser = new JLabel("반갑습니다. " + username + " 수혜자님!");
+
+			    btnSponsering = new JButton("받은 후원");
+			    btnSponsering.addMouseListener(new MouseAdapter() {
+			        @Override
+			        public void mouseClicked(MouseEvent e) {
+			            // 현재 창 닫기
+			            JFrame currentFrame = (JFrame) SwingUtilities.getWindowAncestor(btnSponsering);
+			            currentFrame.dispose(); // 창 완전 종료
+
+			            // 혜자 후원 수락 페이지(RAccept2) 띄우기
+			            RAccept2 acceptPage = new RAccept2();
+			            acceptPage.setVisible(true);
+			        }
+			    });
+			    panel_1.add(btnSponsering);
+
+			    btnCheckHistory = new JButton("수혜 내역 확인");
+			    btnCheckHistory.addMouseListener(new MouseAdapter() {
+			        @Override
+			        public void mouseClicked(MouseEvent e) {
+			            // 현재 창 닫기
+			            JFrame currentFrame = (JFrame) SwingUtilities.getWindowAncestor(btnCheckHistory);
+			            currentFrame.dispose();
+
+			            // 수혜자 수혜 내역 창 띄우기
+			            RAccept3list historyPage = new RAccept3list();
+			            historyPage.setVisible(true);
+			        }
+			    });
+			    panel_1.add(btnCheckHistory);
+
+			    btnLogout = new JButton("로그아웃");
+			    panel_1.add(btnLogout);
+			    break;
+
+				
 			case 2:
 				// 타입 2: Admin 관리자 로그인
 				lblShowUser = new JLabel("반갑습니다. " + username + " 관리자님!");

@@ -55,7 +55,7 @@ public class RAccept2 extends JFrame {
         menuTemplate.setBounds(0, 0, 690, 42);
         contentPane.add(menuTemplate);
 
-     // 후원 내역 리스트를 담을 패널 생성
+        // 후원 내역 리스트를 담을 패널 생성
         JPanel listPanel = new JPanel();
         listPanel.setLayout(new BoxLayout(listPanel, BoxLayout.Y_AXIS));
         listPanel.setBackground(SystemColor.controlLtHighlight);
