@@ -16,7 +16,7 @@ class ScrollTemplate extends JPanel {
 
     private Readable<BaseVO> DAO;
 
-    public JListStudy(Readable<BaseVO> DAO) {
+    public ScrollTemplate(Readable<BaseVO> DAO) {
         this.DAO = DAO;
 
 // 2. DAO를 통해 데이터베이스에서 모든 아이템을 가져옴
