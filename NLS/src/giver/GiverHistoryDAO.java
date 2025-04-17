@@ -54,17 +54,17 @@ public class GiverHistoryDAO implements Readable{
 		// TODO Auto-generated method stub
 		ArrayList<GiverHistoryVO> ghList = new ArrayList<>();
 		String sql = "SELECT "
-				+ "ROW_NUMBER() OVER (ORDER BY ) as idx, "
+				+ "ROW_NUMBER() OVER (ORDER BY GIVER_ID) as idx, "
 				+ "CREATE_DATE, "
 				+ "GIVER_ID, "
 				+ "RECEIVER_ID, "
 				+ "AMOUNT, "
 				+ "MESSAGE, "
-				+ "CASE WHEN IS_RECEIVED = 'Y' THEN 1 ELSE 0 END as is_received"
+				+ "CASE WHEN IS_RECEIVED = 'Y' THEN 1 ELSE 0 END as is_received "
 				+ "FROM HISTORY "
 				+ "WHERE GIVER_ID = ?";
-		ps.setInt(1, targetGiverID);
 		ps = con.prepareStatement(sql);
+		ps.setInt(1, targetGiverID);
 		rs = ps.executeQuery();
 		while(rs.next()) {
 			int idx = rs.getInt("idx");
