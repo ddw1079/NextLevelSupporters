@@ -5,6 +5,9 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
+import db.ConnectDB;
+
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
@@ -136,12 +139,14 @@ public class ReceiverSponseringMainClass extends JFrame {
 				sendMsg += "\n응원 메시지: " + msg;
 				sendMsg += "\n\n이렇게 보낼까요?";
 				int result = JOptionPane.showConfirmDialog(btnSend, sendMsg, "응원 메시지를 보내요", JOptionPane.YES_NO_OPTION);
-				String today = "";
 				boolean isSuccess = false;
 				if(result == JOptionPane.YES_OPTION) {
 					try {
-						isSuccess = new DonationDAO().insertDonationHistory(today, giverID, receiverID, amount, receiverPhone);
+						isSuccess = new DonationDAO().insertDonationHistory(giverID, receiverID, amount, msg);
 					} catch (SQLException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					} catch (ClassNotFoundException e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
 					}
@@ -179,24 +184,16 @@ public class ReceiverSponseringMainClass extends JFrame {
 
 // VO, DAO 객체
 class DonationVO {
-	private String create_date;
 	private int giver_id;
 	private int receiver_id;
 	private int amount;
 	private String message;
 	DonationVO() {}
-	DonationVO(String create_date, int giver_id, int receiver_id, int amount, String message) {
-		this.setCreate_date(create_date);
+	DonationVO(int giver_id, int receiver_id, int amount, String message) {
 		this.setGiver_id(giver_id);
 		this.setReceiver_id(receiver_id);
 		this.setAmount(amount);
 		this.setMessage(message);
-	}
-	public String getCreate_date() {
-		return create_date;
-	}
-	public void setCreate_date(String create_date) {
-		this.create_date = create_date;
 	}
 	public int getGiver_id() {
 		return giver_id;
@@ -229,8 +226,11 @@ class DonationDAO {
 	private Connection con;
 	PreparedStatement ps = null;
 	ResultSet rs = null;
+	DonationDAO() throws ClassNotFoundException, SQLException {
+		con = new ConnectDB().getConnection();
+	}
+	
 	public boolean insertDonationHistory(
-			String create_date, 
 			int giver_id, 
 			int receiver_id, 
 			int amount, 
@@ -247,16 +247,15 @@ class DonationDAO {
 							MESSAGE, 
 							IS_RECEIVED
 					)
-					VALUES (TO_DATE(?), ?, ?, ?, ?, ?)
+					VALUES (SYSDATE, ?, ?, ?, ?, ?)
 					""";
 			
 			ps = con.prepareStatement(sql);
-			ps.setString(1, create_date);
-			ps.setInt(2, giver_id);
-			ps.setInt(3, receiver_id);
-			ps.setInt(4, amount);
-			ps.setString(5, message);
-			ps.setString(6, "N");
+			ps.setInt(1, giver_id);
+			ps.setInt(2, receiver_id);
+			ps.setInt(3, amount);
+			ps.setString(4, message);
+			ps.setString(5, "N");
 			
 			int resultRow = ps.executeUpdate();
 			System.out.println(resultRow + " Rows inserted");
