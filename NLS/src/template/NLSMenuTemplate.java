@@ -36,9 +36,6 @@ public class NLSMenuTemplate extends JPanel {
 	private static JButton btnLogin;
 	private static JButton btnLogout;
 	private static JButton btnRegister;
-	
-	private static GiverMainClass gmc;
-	private static GiverHistoryMainClass ghmc;
 
 
 	/**
@@ -102,18 +99,21 @@ public class NLSMenuTemplate extends JPanel {
 					public void mouseClicked(MouseEvent e) {
 						// 아마 후원자 아이디와 타입을 넘겨주어야 할 것 같음
 						// 여기서 맨 처음 창이 사라지지 않는 이슈 있음. 원인이 뭘까??
-						if(gmc == null) {
-							try {
-								gmc = new GiverMainClass(user_id);
-							} catch (ClassNotFoundException | SQLException e1) {
-								// TODO Auto-generated catch block
-								e1.printStackTrace();
-							}
+						
+						// 현재 창 닫기
+			            JFrame currentFrame = (JFrame) SwingUtilities.getWindowAncestor(btnCheckHistory);
+			            currentFrame.dispose();
+
+			            // 수혜자 수혜 내역 창 띄우기
+			            GiverMainClass gmc;
+						try {
+							gmc = new GiverMainClass(user_id);
+							gmc.setVisible(true);
+						} catch (ClassNotFoundException | SQLException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
 						}
-						if(ghmc != null) {
-							ghmc.setVisible(false);
-						}
-						gmc.setVisible(true);
+			            
 					}
 				});
 				
@@ -122,26 +122,31 @@ public class NLSMenuTemplate extends JPanel {
 				btnCheckHistory.addMouseListener(new MouseAdapter() {
 					@Override
 					public void mouseClicked(MouseEvent e) {
-						// 아마 후원자 아이디와 타입을 넘겨주어야 할 것 같음
-						if(ghmc == null) {
-							try {
-								ghmc = new GiverHistoryMainClass(user_id);
-							} catch (ClassNotFoundException e1) {
-								// TODO Auto-generated catch block
-								e1.printStackTrace();
-							} catch (SQLException e1) {
-								// TODO Auto-generated catch block
-								e1.printStackTrace();
-							}
+						// 현재 창 닫기
+			            JFrame currentFrame = (JFrame) SwingUtilities.getWindowAncestor(btnCheckHistory);
+			            currentFrame.dispose();
+
+			            // 수혜자 수혜 내역 창 띄우기
+			            GiverHistoryMainClass ghmc;
+						try {
+							ghmc = new GiverHistoryMainClass(user_id);
+							ghmc.setVisible(true);
+						} catch (ClassNotFoundException | SQLException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
 						}
-						if(gmc != null) {
-							gmc.setVisible(false);
-						}
-						ghmc.setVisible(true);
 					}
 				});
 				panel_1.add(btnCheckHistory);
 				btnLogout = new JButton("로그아웃");
+				btnLogout.addMouseListener(new MouseAdapter() {
+					@Override
+					public void mouseClicked(MouseEvent e) {
+						// 현재 창 닫기
+			            JFrame currentFrame = (JFrame) SwingUtilities.getWindowAncestor(btnCheckHistory);
+			            currentFrame.dispose();
+					}
+				});
 				panel_1.add(btnLogout);
 				break;
 				
@@ -159,7 +164,7 @@ public class NLSMenuTemplate extends JPanel {
 			            currentFrame.dispose(); // 창 완전 종료
 
 			            // 혜자 후원 수락 페이지(RAccept2) 띄우기
-			            RAccept2 acceptPage = new RAccept2(user_id);
+			            RAccept2 acceptPage = new RAccept2(user_id, username);
 			            acceptPage.setVisible(true);
 			        }
 			    });
@@ -174,13 +179,21 @@ public class NLSMenuTemplate extends JPanel {
 			            currentFrame.dispose();
 
 			            // 수혜자 수혜 내역 창 띄우기
-			            RAccept3list historyPage = new RAccept3list(user_id);
+			            RAccept3list historyPage = new RAccept3list(user_id, username);
 			            historyPage.setVisible(true);
 			        }
 			    });
 			    panel_1.add(btnCheckHistory);
 
 			    btnLogout = new JButton("로그아웃");
+			    btnLogout.addMouseListener(new MouseAdapter() {
+					@Override
+					public void mouseClicked(MouseEvent e) {
+						// 현재 창 닫기
+			            JFrame currentFrame = (JFrame) SwingUtilities.getWindowAncestor(btnCheckHistory);
+			            currentFrame.dispose();
+					}
+				});
 			    panel_1.add(btnLogout);
 			    break;
 
@@ -189,6 +202,14 @@ public class NLSMenuTemplate extends JPanel {
 				// 타입 2: Admin 관리자 로그인
 				lblShowUser = new JLabel("반갑습니다. " + username + " 관리자님!");
 				btnLogout = new JButton("로그아웃");
+				btnLogout.addMouseListener(new MouseAdapter() {
+					@Override
+					public void mouseClicked(MouseEvent e) {
+						// 현재 창 닫기
+			            JFrame currentFrame = (JFrame) SwingUtilities.getWindowAncestor(btnCheckHistory);
+			            currentFrame.dispose();
+					}
+				});
 				panel_1.add(btnLogout);
 				break;
 			default:

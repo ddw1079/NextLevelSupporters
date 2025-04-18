@@ -43,18 +43,6 @@ public class GiverMainClass extends JFrame {
 	 *  - 수혜자 목록을 클릭하면 수혜자 상세정보 및 후원하기 페이지로 이동합니다.
 	 * Output: 수혜자 상세정보 페이지
 	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					GiverMainClass frame = new GiverMainClass();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
 	
 	
 	public GiverMainClass(int user_id) throws ClassNotFoundException, SQLException {
