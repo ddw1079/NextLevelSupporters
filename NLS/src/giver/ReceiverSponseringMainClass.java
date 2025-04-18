@@ -54,16 +54,10 @@ public class ReceiverSponseringMainClass extends JFrame {
 	// 테스트용 메인 생성자
 	// 추후 삭제 예정
 	public ReceiverSponseringMainClass() {
-		this(1, 2);
+		this(1, 2, "굶주리는 준석이", "배고픔에 잠 못 이루는 밤… 작은 도움 하나가 제게 희망이 됩니다.", "010-1111-2222");
 	}
 	
-	public ReceiverSponseringMainClass(int giverID, int receiverID) {
-		// 테스트 데이터. 마음대로 수정해도 됩니다.
-//		int giverID = 0;
-//		int receiverID = 1;
-		String receiverName = "굶주리는 준석이";
-		String receiverPhone =  "010-1111-2222";
-		String receiverReason = "꽃등심이 먹고싶어요...";
+	public ReceiverSponseringMainClass(int giverID, int receiverID, String receiverName, String receiverReason, String receiverPhone) {
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 490, 450);

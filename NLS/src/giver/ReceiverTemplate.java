@@ -9,6 +9,8 @@ import java.awt.event.ActionEvent;
 import java.awt.GridLayout;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import javax.swing.SwingConstants;
+import java.awt.Font;
 
 public class ReceiverTemplate extends JPanel {
 
@@ -29,20 +31,15 @@ public class ReceiverTemplate extends JPanel {
 	 * Output: (클릭한 수혜자의 )수혜자 후원 페이지
 	 */
 	public ReceiverTemplate() {
-		this(0, 1);
+		this(1, 2, "굶주리는 준석이", "배고픔에 잠 못 이루는 밤… 작은 도움 하나가 제게 희망이 됩니다.", "010-1111-2222");
 	}
 	
-	public ReceiverTemplate(int giverID, int receiverID) {
-//		int giverID = 0;
-//		int ReceiverID = 1;
-		String receiverName = "굶주리는 준석이";
-		String receiverReason = "배고픔에 잠 못 이루는 밤… 작은 도움 하나가 제게 희망이 됩니다.";
-		
+	public ReceiverTemplate(int giverID, int receiverID, String receiverName, String receiverReason, String receiverPhone) {
 		btnReceiverName = new JButton(receiverName);
 		btnReceiverName.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				ReceiverSponseringMainClass rsmc = new ReceiverSponseringMainClass(1, 2);
+				ReceiverSponseringMainClass rsmc = new ReceiverSponseringMainClass(giverID, receiverID, receiverName, receiverReason, receiverPhone);
 				rsmc.setVisible(true);
 			}
 		});
@@ -51,17 +48,27 @@ public class ReceiverTemplate extends JPanel {
 			}
 		});
 		setLayout(null);
-		btnReceiverName.setBounds(0,0,185,66);
+		btnReceiverName.setBounds(41,0,185,66);
 		add(btnReceiverName);
 		
 		panel = new JPanel();
 		panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-		panel.setBounds(182, 0, 471, 66);
+		panel.setBounds(225, 0, 471, 66);
 		add(panel);
 		panel.setLayout(new GridLayout(0, 1, 0, 0));
 		
 		lblReceiverReason = new JLabel(receiverReason);
 		panel.add(lblReceiverReason);
+		
+		JPanel panel_1 = new JPanel();
+		panel_1.setBounds(0, 0, 43, 65);
+		add(panel_1);
+		panel_1.setLayout(new GridLayout(0, 1, 0, 0));
+		
+		JLabel lblIndexLabel = new JLabel("1");
+		lblIndexLabel.setFont(new Font("굴림", Font.BOLD, 20));
+		lblIndexLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		panel_1.add(lblIndexLabel);
 
 	}
 }

@@ -10,7 +10,10 @@ import javax.swing.DefaultListModel;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
+import dao.GiverMainClassDAO;
 import template.NLSMenuTemplate;
+import vo.GiverMainClassVO;
 
 import javax.swing.JScrollPane;
 import javax.swing.ListCellRenderer;
@@ -19,6 +22,8 @@ import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JTable;
 import java.awt.GridLayout;
+import java.sql.SQLException;
+
 import javax.swing.BoxLayout;
 
 public class GiverMainClass extends JFrame {
@@ -52,7 +57,16 @@ public class GiverMainClass extends JFrame {
 	}
 	
 	
-	public GiverMainClass() {
+	public GiverMainClass() throws ClassNotFoundException, SQLException {
+		// 테스트 데이터. 유저 아이디를 이어주면 됨.
+		int user_id = 1;
+		
+		
+		// DAO 선언 및 DAO의 read() 실행
+		GiverMainClassDAO gmcdao = new GiverMainClassDAO();
+		ArrayList<GiverMainClassVO> gmcList = gmcdao.read();
+		
+		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 693, 490);
 		contentPane = new JPanel();
@@ -71,23 +85,6 @@ public class GiverMainClass extends JFrame {
 		
 		JLabel lblNewLabel = new JLabel("수혜자 목록");
 		panel.add(lblNewLabel);
-		
-//		DefaultListModel<ReceiverTemplate> listModel = new DefaultListModel<>();
-//		listModel.addElement(new ReceiverTemplate());
-//		listModel.addElement(new ReceiverTemplate());
-//
-//		
-//		
-//		JList<ReceiverTemplate> list = new JList<>(listModel);
-//		list.setFixedCellHeight(66);
-//		list.setLayoutOrientation(JList.VERTICAL);
-//		list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-//		list.setCellRenderer(new ListCellRenderer<ReceiverTemplate>() {
-//		    @Override
-//		    public Component getListCellRendererComponent(JList<? extends ReceiverTemplate> list, ReceiverTemplate value, int index, boolean isSelected, boolean cellHasFocus) {
-//		        return value; // JPanel 반환
-//		    }
-//		});
         
 		JPanel panel_1 = new JPanel();
 		
@@ -100,15 +97,17 @@ public class GiverMainClass extends JFrame {
 		scrollPane.getVerticalScrollBar().setUnitIncrement(20); // 숫자를 늘리면 더 빠르게 스크롤
 		panel_1.setLayout(new BoxLayout(panel_1, BoxLayout.Y_AXIS));
 		
-		panel_1.add( new ReceiverTemplate());
-		panel_1.add( new ReceiverTemplate());
-		panel_1.add( new ReceiverTemplate());
-		panel_1.add( new ReceiverTemplate());
-		panel_1.add( new ReceiverTemplate());
-		panel_1.add( new ReceiverTemplate());
-		panel_1.add( new ReceiverTemplate());
-		panel_1.add( new ReceiverTemplate());
-		panel_1.add( new ReceiverTemplate());
+		// for 문 선언할 곳
+		for(GiverMainClassVO temp: gmcList) {
+			panel_1.add( new ReceiverTemplate(
+					user_id,
+					temp.getIdx(),
+					temp.getReceiver_name(),
+					temp.getReceiver_reason(),
+					temp.getReceiver_phone()
+					));
+		}
+		
 		
 		panel_1.setPreferredSize(new Dimension(653, panel_1.getComponentCount() * 66));
 		panel_1.revalidate();

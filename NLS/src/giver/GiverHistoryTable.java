@@ -9,8 +9,9 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
-import giver.GiverHistoryDAO;
-import giver.GiverHistoryVO;
+
+import dao.GiverHistoryDAO;
+import vo.GiverHistoryVO;
 
 public class GiverHistoryTable extends JPanel {
 
@@ -46,7 +47,7 @@ public class GiverHistoryTable extends JPanel {
         	// 여기에 데이터를 넣고싶어...
         	Object[] newRow = {
         		temp.getIdx(),
-        		temp.getReceiver_id(),
+        		temp.getReceiver_name(),
         		temp.getCreate_date(),
         		temp.getAmount(),
         		temp.getMessage()

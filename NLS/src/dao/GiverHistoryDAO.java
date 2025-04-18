@@ -1,4 +1,4 @@
-package giver;
+package dao;
 
 import java.sql.Connection;
 import java.sql.Date;
@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import interfaces.Readable;
-
+import vo.GiverHistoryVO;
 import db.ConnectDB;
 
 
@@ -23,7 +23,7 @@ import db.ConnectDB;
  *  	- 일자: 후원한 날짜
  *  	- 금액: 후원한 금액
  *  	- 메시지: 후원 시 보낸 메시지
- *  Input: Select id 수혜자명 일자 금액 메시지 from
+ *  Input: Select id 수혜자명 일자 금액 메시지 from History Left Join id=후원자id Left Join id=수혜자id
  * 	Output: 후원내역 테이블 List
  * 
  * */
@@ -51,16 +51,24 @@ public class GiverHistoryDAO implements Readable{
 	public ArrayList<GiverHistoryVO> read(int targetGiverID) throws SQLException {
 		// VO 타입인 ArrayList를 선언한다.
 		ArrayList<GiverHistoryVO> ghList = new ArrayList<>();
-		String sql = "SELECT "
-				+ "ROW_NUMBER() OVER (ORDER BY GIVER_ID) as idx, "
-				+ "CREATE_DATE, "
-				+ "GIVER_ID, "
-				+ "RECEIVER_ID, "
-				+ "AMOUNT, "
-				+ "MESSAGE, "
-				+ "CASE WHEN IS_RECEIVED = 'Y' THEN 1 ELSE 0 END as is_received "
-				+ "FROM HISTORY "
-				+ "WHERE GIVER_ID = ?";
+		
+		// SQL 문 설명: 후원자 ID 로 검색. 
+		// 자동 증가 idx, 생성일, 후원자 아이디와 이름, 수혜자 아이디와 이름, 후원금액, 후원메시지, 수령받음 char 값이 Y면 1 아니면 0
+		String sql = """
+	            SELECT ROW_NUMBER() OVER (ORDER BY H.GIVER_ID) AS idx,
+	                   H.CREATE_DATE,
+	                   H.GIVER_ID,
+	                   G.NAME AS GIVER_NAME,
+	                   H.RECEIVER_ID,
+	                   R.NAME AS RECEIVER_NAME,
+	                   H.AMOUNT,
+	                   H.MESSAGE,
+	                   CASE WHEN H.IS_RECEIVED = 'Y' THEN 1 ELSE 0 END AS is_received
+	            FROM   HISTORY H
+	            LEFT JOIN user_table G ON H.GIVER_ID = G.ID
+	            LEFT JOIN user_table R ON H.RECEIVER_ID = R.ID
+	            WHERE  H.GIVER_ID = ?
+	            """;
 		// SQL문을 PrepareStatement 에 넣고 물음표 부분을 채운다.
 		ps = con.prepareStatement(sql);
 		ps.setInt(1, targetGiverID);
@@ -71,12 +79,14 @@ public class GiverHistoryDAO implements Readable{
 			int idx = rs.getInt("idx");
 			Date create_date = rs.getDate("CREATE_DATE");
 			int giver_id = rs.getInt("GIVER_ID");
+			String giver_name = rs.getString("GIVER_NAME");
 			int receiver_id = rs.getInt("RECEIVER_ID");
+			String receiver_name = rs.getString("RECEIVER_NAME");
 			int amount = rs.getInt("AMOUNT");
 			String message = rs.getString("MESSAGE");
 			boolean is_received = (rs.getInt("is_received") == 1);
 			
-			GiverHistoryVO ghv = new GiverHistoryVO(idx, create_date, giver_id, receiver_id, amount, message, is_received);
+			GiverHistoryVO ghv = new GiverHistoryVO(idx, create_date, giver_id, giver_name, receiver_id, receiver_name, amount, message, is_received);
 			ghList.add(ghv);
 		}
 		
