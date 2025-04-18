@@ -27,6 +27,7 @@ import java.sql.SQLException;
 
 import javax.swing.BoxLayout;
 
+
 public class GiverMainClass extends JFrame {
 
 	private static final long serialVersionUID = 1L;
