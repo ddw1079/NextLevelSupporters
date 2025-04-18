@@ -87,7 +87,7 @@ public class GiverMainClass extends JFrame {
 		for(GiverMainClassVO temp: gmcList) {
 			panel_1.add( new ReceiverTemplate(
 					user_id,
-					temp.getIdx(),
+					temp.getReceiver_id(),
 					temp.getReceiver_name(),
 					temp.getReceiver_reason(),
 					temp.getReceiver_phone()
