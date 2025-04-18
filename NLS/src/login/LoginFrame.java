@@ -1,4 +1,7 @@
 package login;
+
+import Raccept.RAccept2;
+import admin.AdminAccess;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -66,13 +69,32 @@ public class LoginFrame extends JFrame {
                 String username = usernameField.getText();
                 String password = new String(passwordField.getPassword());
 
-                if (username.equals("admin") && password.equals("password")) {
-                    messageLabel.setText("Login successful!");
-                    messageLabel.setForeground(Color.GREEN);
+                String answer = 다오에서 받아온거;
+
+                if (password.equals(answer)) {
+                    if (1 == 2) {
+                        AdminAccess adminFrame = new AdminAccess();
+                        adminFrame.setVisible(true);
+                        this.dispose();
+                        // rootPaneCheckingEnabled 이걸 추천해주네네
+
+                    } else if (1 == 0) {
+                        GiverMainClass giverMainFrame = new GiverMainClass(인자 전달달
+                        );
+                        giverMainFrame.setVisible(true);
+                        this.dispose();
+                    } else {
+                        RAccept2 acceptMainFrame = new RAccept2(인자 전달달
+                        );
+                        acceptMainFrame.setVisible(true);
+                        this.dispose();
+                    }
+
                 } else {
                     messageLabel.setText("Invalid username or password!");
                     messageLabel.setForeground(Color.RED);
                 }
+
             }
         });
     }
