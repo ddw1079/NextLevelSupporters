@@ -21,6 +21,7 @@ import interfaces.Readable;
 import giver.GiverMainClass;
 import giver.GiverHistoryMainClass;
 import Rlist.RAccept3list;
+import db.ConnectDB;
 import Raccept.RAccept2;
 
 
@@ -53,11 +54,12 @@ public class NLSMenuTemplate extends JPanel {
 	 *  	- 2 Admin: "반갑습니다 ㅁㅁㅁ 관리자님!" 라벨, 회원정보 수정?, 로그아웃 버튼 출력
 	 *  Output: 로그인, 회원가입, 후원내역, 수혜내역 페이지
 	 * @throws SQLException 
+	 * @throws ClassNotFoundException 
 	 */
-	public NLSMenuTemplate() throws SQLException {
+	public NLSMenuTemplate() throws SQLException, ClassNotFoundException {
 		this(-1);
 	}
-	public NLSMenuTemplate(int user_id) throws SQLException {
+	public NLSMenuTemplate(int user_id) throws SQLException, ClassNotFoundException {
 		// GRID LAYOUT 선언
 		setLayout(new GridLayout(1, 0, 0, 0));
 		
@@ -72,9 +74,9 @@ public class NLSMenuTemplate extends JPanel {
 		add(panel_1);
 		panel_1.setLayout(new GridLayout(1, 0, 0, 0));
 		
-		
+		int testdata = 1;
 		// 유저 id로 유저 타입과 유저 이름 이어주기
-		NLSMenuTemplateVO user_data = new NLSMenuTemplateDAO().getUserLoginData(user_id);
+		NLSMenuTemplateVO user_data = new NLSMenuTemplateDAO().getUserLoginData(testdata);
 		
 		int usertype = user_data.getUser_type();
 		String username = user_data.getName();
@@ -164,7 +166,16 @@ public class NLSMenuTemplate extends JPanel {
 			            currentFrame.dispose(); // 창 완전 종료
 
 			            // 혜자 후원 수락 페이지(RAccept2) 띄우기
-			            RAccept2 acceptPage = new RAccept2(user_id, username);
+			            RAccept2 acceptPage = null;
+						try {
+							acceptPage = new RAccept2(user_id, username);
+						} catch (SQLException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						} catch (ClassNotFoundException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
 			            acceptPage.setVisible(true);
 			        }
 			    });
@@ -257,6 +268,10 @@ class NLSMenuTemplateDAO {
 	PreparedStatement ps = null;
 	ResultSet rs = null;
 	
+	public NLSMenuTemplateDAO() throws ClassNotFoundException, SQLException{
+		con = new ConnectDB().getConnection();
+	}
+	
 	public NLSMenuTemplateVO getUserLoginData(int user_id) throws SQLException {
 		
 		String sql = """
@@ -264,12 +279,17 @@ class NLSMenuTemplateDAO {
 				FROM	USER_TABLE
 				WHERE	ID = ?
 				""";
-		ps = con.prepareStatement(sql);
-		ps.setInt(1, user_id);
-		rs = ps.executeQuery();
-		NLSMenuTemplateVO vo = new NLSMenuTemplateVO(rs.getInt("ID"), rs.getString("NAME"), rs.getInt("USER_TYPE"));
-		return vo;
-		
+	    try (PreparedStatement ps = con.prepareStatement(sql)) {
+	        ps.setInt(1, user_id);
+	        try (ResultSet rs = ps.executeQuery()) {
+	            if (rs.next()) { // 먼저 next() 호출
+	                return new NLSMenuTemplateVO(rs.getInt("ID"), rs.getString("NAME"), rs.getInt("USER_TYPE"));
+	            } else {
+	                return null; // 데이터가 없으면 null 반환
+	            }
+	        }
+	    }
+
 	}
 	
 }
