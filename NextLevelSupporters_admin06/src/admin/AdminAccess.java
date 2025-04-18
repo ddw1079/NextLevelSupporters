@@ -48,7 +48,7 @@ public class AdminAccess extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
-	private JButton btnActive, btnDactive;
+	private JButton btnActive, btnDeactive;
 	private JTable userTable;
 	private JScrollPane userScrollPane;
 	private JTable historyTable;
@@ -102,7 +102,7 @@ public class AdminAccess extends JFrame {
 				String selected = choice.getSelectedItem();
 				if (selected.equals("유저별 조회")) {// 유저 별 옵션 선택 시 유저 창 활성화 및 내역 창 비활성화
 					btnActive.setVisible(true);
-					btnDactive.setVisible(true);
+					btnDeactive.setVisible(true);
 					txtSearch.setVisible(true);
 					userTable.setVisible(true);
 					userScrollPane.setVisible(true);
@@ -111,7 +111,7 @@ public class AdminAccess extends JFrame {
 
 				} else {// 내역 창 활성화,유저 창 비활성화
 					btnActive.setVisible(false);
-					btnDactive.setVisible(false);
+					btnDeactive.setVisible(false);
 					txtSearch.setVisible(false);
 					userTable.setVisible(false);
 					userScrollPane.setVisible(false);
@@ -164,8 +164,8 @@ public class AdminAccess extends JFrame {
 		btnActive.setBounds(186, 513, 97, 23);
 		contentPane.add(btnActive);
 
-		btnDactive = new JButton("Dactive");// 유저 조회 창에서 선택한 유저를 Dactive 하는 버튼
-		btnDactive.addMouseListener(new MouseAdapter() {
+		btnDeactive = new JButton("Deactive");// 유저 조회 창에서 선택한 유저를 Dactive 하는 버튼
+		btnDeactive.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				try {
@@ -185,8 +185,8 @@ public class AdminAccess extends JFrame {
 				}
 			}
 		});
-		btnDactive.setBounds(547, 513, 97, 23);
-		contentPane.add(btnDactive);
+		btnDeactive.setBounds(547, 513, 97, 23);
+		contentPane.add(btnDeactive);
 
 		
 		
