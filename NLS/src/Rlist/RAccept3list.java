@@ -34,7 +34,7 @@ public class RAccept3list extends JFrame {
 
         try {
             ReceiverHistoryDao dao = new ReceiverHistoryDao();
-            List<ReceiverHistoryVo> vos = dao.read(receiverId); // 후원 내역 조회
+            List<ReceiverHistoryVo> vos = dao.readByStatus(receiverId, "Y"); // ✅ 받은 내역만 조회
 
             Temlist3 tablePanel = new Temlist3(vos);
             tablePanel.setBounds(27, 102, 637, 336);
@@ -49,11 +49,10 @@ public class RAccept3list extends JFrame {
     public static void main(String[] args) {
         EventQueue.invokeLater(() -> {
             try {
-				new RAccept3list(2, "김성진").setVisible(true);
-			} catch (ClassNotFoundException | SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} // 예시: 수혜자 ID = 2
+                new RAccept3list(2, "김성진").setVisible(true);
+            } catch (ClassNotFoundException | SQLException e) {
+                e.printStackTrace();
+            }
         });
     }
 }

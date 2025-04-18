@@ -56,4 +56,9 @@ public class ReceiverHistoryVo {
         return "후원자: " + giverName + ", 금액: " + amount 
                 + "원, 날짜: " + createDate + ", 메세지: " + message; 
     }
+
+	public int getGiverId() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
 }
