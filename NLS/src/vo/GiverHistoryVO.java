@@ -1,30 +1,35 @@
-package giver;
+package vo;
 
 import java.sql.Date;
 
 /* **
  * 파일 설명: 후원자 후원내역에서 사용할 Value Object
  * 파일 상세: 후원자의 후원내역에서 사용할 Value Object 기술
- *  - 후원자 DAO에서 데이터를 사용할 것
- *  - 아래 데이터는 History DB와 같음
- * 
+ *  - GiverHistoryDAO 에서 사용할 데이터
+ *  - History 테이블 전체 내용과 User 테이블의 이름을 가져옴
+ *  
+ *  
  * */
 
 public class GiverHistoryVO {
 	private int idx;
 	private Date create_date;
 	private int giver_id;
+	private String giver_name;
 	private int receiver_id;
+	private String receiver_name;
 	private int amount;
 	private String message;
 	private boolean is_received;
 	public GiverHistoryVO() {}
-	public GiverHistoryVO (int idx, Date create_date, int giver_id, int receiver_id, int amount, String message, boolean is_received) {
+	public GiverHistoryVO (int idx, Date create_date, int giver_id, String giver_name, int receiver_id, String receiver_name, int amount, String message, boolean is_received) {
 		super();
 		this.setIdx(idx);
 		this.setCreate_date(create_date);
 		this.setGiver_id(giver_id);
+		this.setGiver_name(giver_name);
 		this.setReceiver_id(receiver_id);
+		this.setReceiver_name(receiver_name);
 		this.setAmount(amount);
 		this.setMessage(message);
 		this.setIs_received(is_received);
@@ -72,5 +77,17 @@ public class GiverHistoryVO {
 	}
 	public void setIs_received(boolean is_received) {
 		this.is_received = is_received;
+	}
+	public String getGiver_name() {
+		return giver_name;
+	}
+	public void setGiver_name(String giver_name) {
+		this.giver_name = giver_name;
+	}
+	public String getReceiver_name() {
+		return receiver_name;
+	}
+	public void setReceiver_name(String receiver_name) {
+		this.receiver_name = receiver_name;
 	}
 }
