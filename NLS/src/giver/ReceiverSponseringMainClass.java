@@ -14,6 +14,11 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.sql.Connection;
+import java.sql.Date;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 public class ReceiverSponseringMainClass extends JFrame {
 
@@ -131,9 +136,23 @@ public class ReceiverSponseringMainClass extends JFrame {
 				sendMsg += "\n응원 메시지: " + msg;
 				sendMsg += "\n\n이렇게 보낼까요?";
 				int result = JOptionPane.showConfirmDialog(btnSend, sendMsg, "응원 메시지를 보내요", JOptionPane.YES_NO_OPTION);
+				String today = "";
+				boolean isSuccess = false;
 				if(result == JOptionPane.YES_OPTION) {
-					JOptionPane.showConfirmDialog(btnSend, receiverName + " 에게 후원해주셔서 감사드립니다.\n후원 내역은 후원 내역 페이지에서 확인하실 수 있습니다.", "후원에 감사드립니다.", JOptionPane.YES_OPTION);
-					dispose();
+					try {
+						isSuccess = new DonationDAO().insertDonationHistory(today, giverID, receiverID, amount, receiverPhone);
+					} catch (SQLException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+					if(isSuccess) {
+						JOptionPane.showConfirmDialog(btnSend, receiverName + " 에게 후원해주셔서 감사드립니다.\n후원 내역은 후원 내역 페이지에서 확인하실 수 있습니다.", "후원에 감사드립니다.", JOptionPane.YES_OPTION);
+						dispose();
+					} else {
+						JOptionPane.showConfirmDialog(btnSend, receiverName + " ", "오류 발생", JOptionPane.YES_OPTION);
+						dispose();
+					}
+					
 				}
 			}
 		});
@@ -154,5 +173,99 @@ public class ReceiverSponseringMainClass extends JFrame {
 		});
 		btnCancel.setBounds(251, 294, 201, 99);
 		contentPane.add(btnCancel);
+	}
+}
+
+
+// VO, DAO 객체
+class DonationVO {
+	private String create_date;
+	private int giver_id;
+	private int receiver_id;
+	private int amount;
+	private String message;
+	DonationVO() {}
+	DonationVO(String create_date, int giver_id, int receiver_id, int amount, String message) {
+		this.setCreate_date(create_date);
+		this.setGiver_id(giver_id);
+		this.setReceiver_id(receiver_id);
+		this.setAmount(amount);
+		this.setMessage(message);
+	}
+	public String getCreate_date() {
+		return create_date;
+	}
+	public void setCreate_date(String create_date) {
+		this.create_date = create_date;
+	}
+	public int getGiver_id() {
+		return giver_id;
+	}
+	public void setGiver_id(int giver_id) {
+		this.giver_id = giver_id;
+	}
+	public int getReceiver_id() {
+		return receiver_id;
+	}
+	public void setReceiver_id(int receiver_id) {
+		this.receiver_id = receiver_id;
+	}
+	public int getAmount() {
+		return amount;
+	}
+	public void setAmount(int amount) {
+		this.amount = amount;
+	}
+	public String getMessage() {
+		return message;
+	}
+	public void setMessage(String message) {
+		this.message = message;
+	}
+	
+}
+
+class DonationDAO {
+	private Connection con;
+	PreparedStatement ps = null;
+	ResultSet rs = null;
+	public boolean insertDonationHistory(
+			String create_date, 
+			int giver_id, 
+			int receiver_id, 
+			int amount, 
+			String message
+			) 
+					throws SQLException {
+		try {
+			String sql = """
+					INSERT	INTO HISTORY (
+							CREATE_DATE, 
+							GIVER_ID, 
+							RECEIVER_ID, 
+							AMOUNT, 
+							MESSAGE, 
+							IS_RECEIVED
+					)
+					VALUES (TO_DATE(?), ?, ?, ?, ?, ?)
+					""";
+			
+			ps = con.prepareStatement(sql);
+			ps.setString(1, create_date);
+			ps.setInt(2, giver_id);
+			ps.setInt(3, receiver_id);
+			ps.setInt(4, amount);
+			ps.setString(5, message);
+			ps.setString(6, "N");
+			
+			int resultRow = ps.executeUpdate();
+			System.out.println(resultRow + " Rows inserted");
+			
+		} catch(SQLException e) {
+			System.out.println("SQL Exception Error");
+			return false;
+		}
+		
+		return true;
 	}
 }
