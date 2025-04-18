@@ -73,10 +73,8 @@ public class NLSMenuTemplate extends JPanel {
 		panel_1 = new JPanel();
 		add(panel_1);
 		panel_1.setLayout(new GridLayout(1, 0, 0, 0));
-		
-		int testdata = 1;
-		// 유저 id로 유저 타입과 유저 이름 이어주기
-		NLSMenuTemplateVO user_data = new NLSMenuTemplateDAO().getUserLoginData(testdata);
+
+		NLSMenuTemplateVO user_data = new NLSMenuTemplateDAO().getUserLoginData(user_id);
 		
 		int usertype = user_data.getUser_type();
 		String username = user_data.getName();
@@ -190,7 +188,13 @@ public class NLSMenuTemplate extends JPanel {
 			            currentFrame.dispose();
 
 			            // 수혜자 수혜 내역 창 띄우기
-			            RAccept3list historyPage = new RAccept3list(user_id, username);
+			            RAccept3list historyPage = null;
+						try {
+							historyPage = new RAccept3list(user_id, username);
+						} catch (ClassNotFoundException | SQLException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
 			            historyPage.setVisible(true);
 			        }
 			    });
