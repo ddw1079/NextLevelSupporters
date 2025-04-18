@@ -12,6 +12,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -132,32 +133,38 @@ public class ReceiverSponseringMainClass extends JFrame {
 		btnSend.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				String sendMsg = "후원금과 메시지를 " + receiverName + " 에게 송부합니다.";
-				int amount = Integer.parseInt(textFieldAmount.getText());
-				sendMsg += "\n후원 금액: " + amount;
-				String msg = textFieldMsg.getText();
-				sendMsg += "\n응원 메시지: " + msg;
-				sendMsg += "\n\n이렇게 보낼까요?";
-				int result = JOptionPane.showConfirmDialog(btnSend, sendMsg, "응원 메시지를 보내요", JOptionPane.YES_NO_OPTION);
-				boolean isSuccess = false;
-				if(result == JOptionPane.YES_OPTION) {
-					try {
-						isSuccess = new DonationDAO().insertDonationHistory(giverID, receiverID, amount, msg);
-					} catch (SQLException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					} catch (ClassNotFoundException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
+				if(!textFieldAmount.getText().matches("\\d+")) {
+					JOptionPane.showMessageDialog(btnSend, "후원 금액에는 숫자를 입력해주세요.", "오류 발생", JOptionPane.YES_OPTION);
+				} else if(textFieldMsg.getText().isEmpty() || textFieldAmount.getText().isEmpty()) {
+					JOptionPane.showMessageDialog(btnSend, "후원 메시지와 후원 금액을 입력해주세요.", "오류 발생", JOptionPane.YES_OPTION);
+				} else {
+					String sendMsg = "후원금과 메시지를 " + receiverName + " 에게 송부합니다.";
+					int amount = Integer.parseInt(textFieldAmount.getText());
+					sendMsg += "\n후원 금액: " + amount;
+					String msg = textFieldMsg.getText();
+					sendMsg += "\n응원 메시지: " + msg;
+					sendMsg += "\n\n이렇게 보낼까요?";
+					int result = JOptionPane.showConfirmDialog(btnSend, sendMsg, "응원 메시지를 보내요", JOptionPane.YES_NO_OPTION);
+					boolean isSuccess = false;
+					if(result == JOptionPane.YES_OPTION) {
+						try {
+							isSuccess = new DonationDAO().insertDonationHistory(giverID, receiverID, amount, msg);
+						} catch (SQLException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						} catch (ClassNotFoundException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
+						if(isSuccess) {
+							ImageIcon checkIcon = new ImageIcon(getClass().getResource("/IMAGES/check.png"));
+							JOptionPane.showMessageDialog(btnSend, receiverName + " 에게 후원해주셔서 감사드립니다.\n후원 내역은 후원 내역 페이지에서 확인하실 수 있습니다.", "후원에 감사드립니다.", JOptionPane.PLAIN_MESSAGE, checkIcon);
+							dispose();
+						} else {
+							JOptionPane.showMessageDialog(btnSend, receiverName + "에게 후원하던 중 오류가 발생햇습니다.", "오류 발생", JOptionPane.YES_OPTION);
+							dispose();
+						}
 					}
-					if(isSuccess) {
-						JOptionPane.showConfirmDialog(btnSend, receiverName + " 에게 후원해주셔서 감사드립니다.\n후원 내역은 후원 내역 페이지에서 확인하실 수 있습니다.", "후원에 감사드립니다.", JOptionPane.YES_OPTION);
-						dispose();
-					} else {
-						JOptionPane.showConfirmDialog(btnSend, receiverName + " ", "오류 발생", JOptionPane.YES_OPTION);
-						dispose();
-					}
-					
 				}
 			}
 		});
