@@ -3,7 +3,12 @@ package template;
 import java.awt.GridLayout;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -12,6 +17,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
+import interfaces.Readable;
 import giver.GiverMainClass;
 import giver.GiverHistoryMainClass;
 import Rlist.RAccept3list;
@@ -49,11 +55,12 @@ public class NLSMenuTemplate extends JPanel {
 	 *  	- 1 수혜자: "반갑습니다 ㅁㅁㅁ 수혜자님!" 라벨, 수혜내역, 회원정보 수정, 로그아웃 버튼 출력
 	 *  	- 2 Admin: "반갑습니다 ㅁㅁㅁ 관리자님!" 라벨, 회원정보 수정?, 로그아웃 버튼 출력
 	 *  Output: 로그인, 회원가입, 후원내역, 수혜내역 페이지
+	 * @throws SQLException 
 	 */
-	public NLSMenuTemplate() {
-		this("111", 1);
+	public NLSMenuTemplate() throws SQLException {
+		this(-1);
 	}
-	public NLSMenuTemplate(String username, int usertype) {
+	public NLSMenuTemplate(int user_id) throws SQLException {
 		// GRID LAYOUT 선언
 		setLayout(new GridLayout(1, 0, 0, 0));
 		
@@ -67,6 +74,14 @@ public class NLSMenuTemplate extends JPanel {
 		panel_1 = new JPanel();
 		add(panel_1);
 		panel_1.setLayout(new GridLayout(1, 0, 0, 0));
+		
+		
+		// 유저 id로 유저 타입과 유저 이름 이어주기
+		NLSMenuTemplateVO user_data = new NLSMenuTemplateDAO().getUserLoginData(user_id);
+		
+		int usertype = user_data.getUser_type();
+		String username = user_data.getName();
+		
 		
 		// 생성자로 가져온 유저 타입에 따라 라벨과 버튼을 다르게 생성한다.
 		switch (usertype) {
@@ -88,7 +103,12 @@ public class NLSMenuTemplate extends JPanel {
 						// 아마 후원자 아이디와 타입을 넘겨주어야 할 것 같음
 						// 여기서 맨 처음 창이 사라지지 않는 이슈 있음. 원인이 뭘까??
 						if(gmc == null) {
-							gmc = new GiverMainClass();
+							try {
+								gmc = new GiverMainClass(user_id);
+							} catch (ClassNotFoundException | SQLException e1) {
+								// TODO Auto-generated catch block
+								e1.printStackTrace();
+							}
 						}
 						if(ghmc != null) {
 							ghmc.setVisible(false);
@@ -105,7 +125,7 @@ public class NLSMenuTemplate extends JPanel {
 						// 아마 후원자 아이디와 타입을 넘겨주어야 할 것 같음
 						if(ghmc == null) {
 							try {
-								ghmc = new GiverHistoryMainClass();
+								ghmc = new GiverHistoryMainClass(user_id);
 							} catch (ClassNotFoundException e1) {
 								// TODO Auto-generated catch block
 								e1.printStackTrace();
@@ -139,7 +159,7 @@ public class NLSMenuTemplate extends JPanel {
 			            currentFrame.dispose(); // 창 완전 종료
 
 			            // 혜자 후원 수락 페이지(RAccept2) 띄우기
-			            RAccept2 acceptPage = new RAccept2();
+			            RAccept2 acceptPage = new RAccept2(user_id);
 			            acceptPage.setVisible(true);
 			        }
 			    });
@@ -154,7 +174,7 @@ public class NLSMenuTemplate extends JPanel {
 			            currentFrame.dispose();
 
 			            // 수혜자 수혜 내역 창 띄우기
-			            RAccept3list historyPage = new RAccept3list();
+			            RAccept3list historyPage = new RAccept3list(user_id);
 			            historyPage.setVisible(true);
 			        }
 			    });
@@ -178,4 +198,57 @@ public class NLSMenuTemplate extends JPanel {
 		}
 		panel.add(lblShowUser);
 	}
+}
+
+class NLSMenuTemplateVO {
+	private int id;
+	private String name;
+	private int user_type;
+	NLSMenuTemplateVO() {}
+	NLSMenuTemplateVO(int id, String name, int user_type) {
+		super();
+		this.setId(id);
+		this.setName(name);
+		this.setUser_type(user_type);
+	}
+	public int getId() {
+		return id;
+	}
+	public void setId(int id) {
+		this.id = id;
+	}
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
+	public int getUser_type() {
+		return user_type;
+	}
+	public void setUser_type(int user_type) {
+		this.user_type = user_type;
+	}
+}
+
+class NLSMenuTemplateDAO {
+	private Connection con;
+	PreparedStatement ps = null;
+	ResultSet rs = null;
+	
+	public NLSMenuTemplateVO getUserLoginData(int user_id) throws SQLException {
+		
+		String sql = """
+				SELECT 	ID, NAME, USER_TYPE
+				FROM	USER_TABLE
+				WHERE	ID = ?
+				""";
+		ps = con.prepareStatement(sql);
+		ps.setInt(1, user_id);
+		rs = ps.executeQuery();
+		NLSMenuTemplateVO vo = new NLSMenuTemplateVO(rs.getInt("ID"), rs.getString("NAME"), rs.getInt("USER_TYPE"));
+		return vo;
+		
+	}
+	
 }
