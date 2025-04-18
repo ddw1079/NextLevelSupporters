@@ -35,19 +35,6 @@ public class GiverHistoryMainClass extends JFrame {
 	 *  - 후원 정보를 검색할 수 있습니다.
 	 * Output: 없음 
 	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					GiverHistoryMainClass frame = new GiverHistoryMainClass();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
-
 	
 	/**
 	 * Create the frame.
