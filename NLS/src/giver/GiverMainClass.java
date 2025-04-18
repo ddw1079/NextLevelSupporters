@@ -57,11 +57,8 @@ public class GiverMainClass extends JFrame {
 	}
 	
 	
-	public GiverMainClass() throws ClassNotFoundException, SQLException {
-		// 테스트 데이터. 유저 아이디를 이어주면 됨.
-		int user_id = 1;
-		
-		
+	public GiverMainClass(int user_id) throws ClassNotFoundException, SQLException {
+
 		// DAO 선언 및 DAO의 read() 실행
 		GiverMainClassDAO gmcdao = new GiverMainClassDAO();
 		ArrayList<GiverMainClassVO> gmcList = gmcdao.read();
@@ -75,7 +72,7 @@ public class GiverMainClass extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
-		NLSMenuTemplate menuTemplate = new NLSMenuTemplate("김희상", 0);
+		NLSMenuTemplate menuTemplate = new NLSMenuTemplate(user_id);
 		menuTemplate.setBounds(12, 10, 653, 41);
 		contentPane.add(menuTemplate);
 		
