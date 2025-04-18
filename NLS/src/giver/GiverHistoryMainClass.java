@@ -54,10 +54,7 @@ public class GiverHistoryMainClass extends JFrame {
 	 * @throws SQLException 
 	 * @throws ClassNotFoundException 
 	 */
-	public GiverHistoryMainClass() throws ClassNotFoundException, SQLException {
-		// 테스트 데이터.
-		int user_id = 0;
-		String user_name = "김희상";
+	public GiverHistoryMainClass(int user_id) throws ClassNotFoundException, SQLException {
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 978, 507);
@@ -73,7 +70,7 @@ public class GiverHistoryMainClass extends JFrame {
 		lblNewLabel_1.setBounds(242, 61, 466, 41);
 		contentPane.add(lblNewLabel_1);
 		
-		NLSMenuTemplate menuTemplate = new NLSMenuTemplate(user_name, user_id);
+		NLSMenuTemplate menuTemplate = new NLSMenuTemplate(user_id);
 		menuTemplate.setBounds(12, 10, 938, 41);
 		contentPane.add(menuTemplate);
 		
