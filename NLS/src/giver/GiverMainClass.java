@@ -18,6 +18,7 @@ import vo.GiverMainClassVO;
 import javax.swing.JScrollPane;
 import javax.swing.ListCellRenderer;
 import javax.swing.ListSelectionModel;
+import javax.swing.SwingUtilities;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JTable;
@@ -99,4 +100,16 @@ public class GiverMainClass extends JFrame {
 		panel_1.repaint();
 
 	}
+	
+    /** 테스트용 main */
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -> {
+            try {
+				new GiverMainClass(1).setVisible(true);
+			} catch (ClassNotFoundException | SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+        });
+    }
 }

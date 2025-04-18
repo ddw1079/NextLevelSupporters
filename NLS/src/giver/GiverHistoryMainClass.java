@@ -6,8 +6,13 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
+
+import Raccept.RAccept2;
+
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
+
 import java.awt.Font;
 import java.sql.SQLException;
 
@@ -67,4 +72,16 @@ public class GiverHistoryMainClass extends JFrame {
 		
 		
 	}
+	
+    /** 테스트용 main */
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -> {
+            try {
+				new GiverHistoryMainClass(1).setVisible(true);
+			} catch (ClassNotFoundException | SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+        });
+    }
 }

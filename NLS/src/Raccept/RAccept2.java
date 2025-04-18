@@ -3,6 +3,7 @@ package Raccept;
 import javax.swing.*;
 import java.awt.*;
 import java.sql.Connection;
+import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -11,7 +12,7 @@ import db.ConnectDB;
 
 public class RAccept2 extends JFrame {
 
-    public RAccept2(int receiverId, String receiverName) {
+    public RAccept2(int receiverId, String receiverName) throws ClassNotFoundException, SQLException {
         // 1) 기본 프레임 세팅
         setTitle("받은 후원내역");
         setBounds(100, 100, 706, 477);
@@ -20,7 +21,7 @@ public class RAccept2 extends JFrame {
         setContentPane(root);
 
         // 2) 상단 메뉴바 + 제목
-        template.NLSMenuTemplate menu = new template.NLSMenuTemplate(receiverName, 1);
+        template.NLSMenuTemplate menu = new template.NLSMenuTemplate(receiverId);
         menu.setBounds(0, 0, 690, 42);
         root.add(menu);
 
@@ -77,7 +78,12 @@ public class RAccept2 extends JFrame {
     /** 테스트용 main */
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
-            new RAccept2(2, "김성진").setVisible(true);
+            try {
+				new RAccept2(2, "김성진").setVisible(true);
+			} catch (ClassNotFoundException | SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
         });
     }
 }
