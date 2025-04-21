@@ -13,6 +13,7 @@
 package Rlist;
 
 import java.awt.BorderLayout;
+import java.awt.Font;
 import java.util.List;
 
 import javax.swing.*;
@@ -32,7 +33,7 @@ public Temlist3(List<ReceiverHistoryVo> vos) {
 
     for (int i = 0; i < vos.size(); i++) {
         ReceiverHistoryVo vo = vos.get(i);
-        data[i][0] = vo.getGiverID();
+        data[i][0] = vo.getGiverId();
         data[i][1] = vo.getGiverName();
         data[i][2] = vo.getCreateDate().toString();
         data[i][3] = String.format("%,d", vo.getAmount());
@@ -42,7 +43,11 @@ public Temlist3(List<ReceiverHistoryVo> vos) {
     DefaultTableModel model = new DefaultTableModel(data, columnNames);
     JTable table = new JTable(model);
     table.setEnabled(false); // 테이블 수정 불가
-
+    
+    table.setRowHeight(30);
+    table.setFont(new Font("나눔고딕", Font.PLAIN, 15));
+    table.getTableHeader().setFont(new Font("나눔고딕", Font.BOLD, 16));
+    
     // 칼럼 너비 설정
     TableColumn column;
     column = table.getColumnModel().getColumn(0); column.setPreferredWidth(40);  // ID
