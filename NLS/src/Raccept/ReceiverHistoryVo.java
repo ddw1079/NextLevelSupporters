@@ -8,7 +8,8 @@ public class ReceiverHistoryVo {
     private int amount;
     private Date createDate;
     private String message;
-
+    private String account;
+    
     public ReceiverHistoryVo() {
     	
     }
@@ -51,6 +52,15 @@ public class ReceiverHistoryVo {
 
     public void setMessage(String message) {
         this.message = message;
+    }
+    
+    //계좌번호 Getter/Setter
+    public String getAccount() {
+        return account;
+    }
+
+    public void setAccount(String account) {
+        this.account = account;
     }
 
     @Override

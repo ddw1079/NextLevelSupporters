@@ -44,7 +44,8 @@ public class ReceiverHistoryDao implements Readable<ReceiverHistoryVo> {
                    U.NAME AS GIVER_NAME,
                    H.AMOUNT,
                    H.CREATE_DATE,
-                   H.MESSAGE
+                   H.MESSAGE,
+                   U.ACCOUNT AS GIVER_ACCOUNT
             FROM   HISTORY H
             JOIN   USER_TABLE U ON H.GIVER_ID = U.ID
             WHERE  H.RECEIVER_ID = ?
@@ -64,6 +65,7 @@ public class ReceiverHistoryDao implements Readable<ReceiverHistoryVo> {
                     vo.setAmount(rs.getInt("AMOUNT"));
                     vo.setCreateDate(rs.getDate("CREATE_DATE"));
                     vo.setMessage(rs.getString("MESSAGE"));
+                    vo.setAccount(rs.getString("GIVER_ACCOUNT")); // ✅ 여기 수정됨
                     list.add(vo);
                 }
             }
@@ -71,6 +73,7 @@ public class ReceiverHistoryDao implements Readable<ReceiverHistoryVo> {
 
         return list;
     }
+
 
     /** 전체 조회는 비활성화 */
     @Override
