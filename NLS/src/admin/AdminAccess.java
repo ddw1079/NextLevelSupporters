@@ -101,8 +101,8 @@ public class AdminAccess extends JFrame {
 			public void itemStateChanged(ItemEvent e) {
 				String selected = choice.getSelectedItem();
 				if (selected.equals("유저별 조회")) {// 유저 별 옵션 선택 시 유저 창 활성화 및 내역 창 비활성화
-					btnActive.setVisible(true);
-					btnDeactive.setVisible(true);
+					//btnActive.setVisible(true);
+					//btnDeactive.setVisible(true);
 					txtSearch.setVisible(true);
 					userTable.setVisible(true);
 					userScrollPane.setVisible(true);
@@ -110,8 +110,8 @@ public class AdminAccess extends JFrame {
 					historyTable.setVisible(false);
 
 				} else {// 내역 창 활성화,유저 창 비활성화
-					btnActive.setVisible(false);
-					btnDeactive.setVisible(false);
+					//btnActive.setVisible(false);
+					//btnDeactive.setVisible(false);
 					txtSearch.setVisible(false);
 					userTable.setVisible(false);
 					userScrollPane.setVisible(false);
