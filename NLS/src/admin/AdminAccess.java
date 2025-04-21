@@ -251,6 +251,48 @@ public class AdminAccess extends JFrame {
 		historyTable.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {// 상세정보 출력 이벤트
+
+				int row = historyTable.rowAtPoint(e.getPoint());
+				int column = historyTable.columnAtPoint(e.getPoint());
+				int user = 0;
+				String logid ="";
+				if (row != -1 && (column == 0 || column == 2)) {
+					dispose();
+					setVisible(false);
+					Object userid = historyTable.getValueAt(row, column);// 선택된 유저 ID를 추출
+					user = Integer.parseInt(userid.toString());// int로 변환
+					Object login_id = historyTable.getValueAt(row, column+1);
+					logid = login_id.toString();
+					try {
+						adminInfomation info = new adminInfomation(user,logid);
+						info.setVisible(true);
+					} catch (ClassNotFoundException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					} catch (SQLException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+				}else if (row != -1 && (column == 1 || column == 3)) {
+					dispose();
+					setVisible(false);
+					Object userid = historyTable.getValueAt(row, column-1);// 선택된 유저 ID를 추출
+					user = Integer.parseInt(userid.toString());// int로 변환
+					Object login_id = historyTable.getValueAt(row, column);
+					logid = login_id.toString();
+					try {
+						adminInfomation info = new adminInfomation(user,logid);
+						info.setVisible(true);
+					} catch (ClassNotFoundException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					} catch (SQLException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+				}
+
+				/*
 				int row = historyTable.rowAtPoint(e.getPoint());
 				int column = historyTable.columnAtPoint(e.getPoint());
 				int user = 0;
@@ -297,7 +339,7 @@ public class AdminAccess extends JFrame {
 				} catch (SQLException e1) {
 					e1.printStackTrace();
 					JOptionPane.showMessageDialog(null, "오류 발생");
-				}
+				}*/
 			}
 		});
 
