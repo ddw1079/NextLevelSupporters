@@ -52,6 +52,24 @@ public class LoginDAO {
         return -1;
     }
 
+    public String getActive(int userId) throws SQLException {
+        String sql = "SELECT IS_ACTIVE FROM USER_TABLE WHERE ID = ?";
+        pstmt = con.prepareStatement(sql);
+        pstmt.setInt(1, userId);
+        rs = pstmt.executeQuery();
+
+        if (rs.next()) {
+            String isActive = rs.getString("IS_ACTIVE");
+            if (rs.wasNull()) {
+                System.out.println("활성화 상태가 설정되지 않았습니다.");
+                return null;
+            }
+            return isActive;
+        }
+        System.out.println("사용자를 찾을 수 없습니다: " + userId);
+        return null;
+    }
+
     public String getUserName(int userId) throws SQLException {
         String sql = "SELECT NAME FROM USER_TABLE WHERE ID = ?";
         pstmt = con.prepareStatement(sql);

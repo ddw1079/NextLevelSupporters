@@ -93,3 +93,11 @@ VALUES (2, 'Educational expenses');
 INSERT INTO history (CREATE_DATE, GIVER_ID, RECEIVER_ID, AMOUNT, MESSAGE, IS_RECEIVED)
 VALUES (SYSDATE, 1, 2, 100000, 'Donation for education', 'N');
 ```
+## 4. ID 자동생성 setting
+``` SQL
+CREATE SEQUENCE user_seq
+START WITH 100
+INCREMENT BY 1
+NOCACHE
+NOCYCLE;
+```
