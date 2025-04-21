@@ -34,7 +34,7 @@ public class RAccept3list extends JFrame {
 
         try {
             ReceiverHistoryDao dao = new ReceiverHistoryDao();
-            List<ReceiverHistoryVo> vos = dao.readByStatus(receiverId, "Y"); // ✅ 받은 내역만 조회
+            List<ReceiverHistoryVo> vos = dao.readByStatus(receiverId, "Y"); // 받은 내역만 조회
 
             Temlist3 tablePanel = new Temlist3(vos);
             tablePanel.setBounds(27, 102, 637, 336);

@@ -1,72 +1,91 @@
 package Raccept;
 
+import template.NLSMenuTemplate;
+
 import javax.swing.*;
 import java.awt.*;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.List;
 
 public class RAccept2 extends JFrame {
 
     public RAccept2(int receiverId, String receiverName) throws ClassNotFoundException, SQLException {
-        setTitle("받은 후원내역");
-        setBounds(100, 100, 706, 477);
+        setTitle("받기 전 후원내역");
+        setSize(706, 477);
+        setLocationRelativeTo(null); // 화면 중앙 정렬
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-        JPanel root = new JPanel(null);
+
+        JPanel root = new JPanel(new BorderLayout());
         setContentPane(root);
 
-        // 메뉴바 + 제목
-        template.NLSMenuTemplate menu = new template.NLSMenuTemplate(receiverId);
+        // 상단 메뉴 + 제목 패널
+        JPanel topPanel = new JPanel(null);
+        topPanel.setPreferredSize(new Dimension(690, 100));
+        topPanel.setBackground(Color.WHITE);
+
+        NLSMenuTemplate menu = new NLSMenuTemplate(receiverId);
         menu.setBounds(0, 0, 690, 42);
-        root.add(menu);
+        topPanel.add(menu);
 
-        JLabel lblTitle = new JLabel("받은 후원내역");
-        lblTitle.setFont(new Font("나눔고딕 ExtraBold", Font.BOLD, 20));
-        lblTitle.setBounds(27, 64, 300, 30);
-        root.add(lblTitle);
+        JLabel lblTitle = new JLabel("받기 전 후원내역");
+        lblTitle.setFont(new Font("나눔고딕 ExtraBold", Font.BOLD, 23));
+        lblTitle.setBounds(10, 60, 300, 30);
+        topPanel.add(lblTitle);
 
-        // 스크롤 영역
+        root.add(topPanel, BorderLayout.NORTH);
+
+        // 카드 리스트 패널 (JPanel로 변경 )
         JPanel listPanel = new JPanel();
         listPanel.setLayout(new BoxLayout(listPanel, BoxLayout.Y_AXIS));
+        listPanel.setBackground(SystemColor.info);
+
         JScrollPane sp = new JScrollPane(listPanel);
-        sp.setBounds(27, 102, 637, 336);
-        sp.getVerticalScrollBar().setUnitIncrement(60);
-        root.add(sp);
+        sp.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        root.add(sp, BorderLayout.CENTER);
+        // 스크롤 속도 빠르게 설정 (기본보다 높게)
+        sp.getVerticalScrollBar().setUnitIncrement(16); 
 
         // DB에서 카드 불러오기
         try {
             ReceiverHistoryDao dao = new ReceiverHistoryDao();
-            List<ReceiverHistoryVo> vos = dao.readByStatus(receiverId, "Y");
+            List<ReceiverHistoryVo> vos = dao.readByStatus(receiverId, "N");
 
+            System.out.println("받기 전 후원 수: " + vos.size()); // 디버깅 로그
 
             SimpleDateFormat fmt = new SimpleDateFormat("yyyy.MM.dd");
+
             for (ReceiverHistoryVo v : vos) {
                 Temlist2 card = new Temlist2(
-                			    v.getGiverName(),
-                			    String.format("%,d", v.getAmount()),
-                			    fmt.format(v.getCreateDate()),
-                			    v.getMessage(),
-                			    listPanel,
-                			    v.getGiverId(),   // ➕ 추가
-                			    receiverId        // ➕ 추가
-                			);
+                        v.getGiverName(),
+                        String.format("%,d", v.getAmount()),
+                        fmt.format(v.getCreateDate()),
+                        v.getMessage(),
+                        listPanel,                 // JPanel로 통일
+                        receiverId,
+                        v.getGiverId(),
+                        v.getCreateDate()
+                );
 
-                card.setBackground(SystemColor.menu);
-                card.setMaximumSize(new Dimension(600, 220));
+                card.setPreferredSize(new Dimension(600, 180));
+                card.setMaximumSize(new Dimension(600, 180));
                 card.setAlignmentX(Component.CENTER_ALIGNMENT);
+                card.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY));
+                listPanel.add(Box.createVerticalStrut(10)); // 카드 간 간격
                 listPanel.add(card);
             }
+
+            listPanel.revalidate();
+            listPanel.repaint();
 
         } catch (Exception e) {
             e.printStackTrace();
             JOptionPane.showMessageDialog(this,
-                "DB 오류: " + e.getMessage(),
-                "오류", JOptionPane.ERROR_MESSAGE);
+                    "DB 오류: " + e.getMessage(),
+                    "오류", JOptionPane.ERROR_MESSAGE);
         }
     }
 
-    /** 테스트용 main */
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
             try {
