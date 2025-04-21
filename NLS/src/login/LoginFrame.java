@@ -5,6 +5,10 @@ import admin.AdminAccess;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.sql.SQLException;
+import giver.GiverMainClass;
+import Raccept.RAccept2;
+import login.LoginDAO;
 
 public class LoginFrame extends JFrame {
 
@@ -66,35 +70,46 @@ public class LoginFrame extends JFrame {
         // 로그인 버튼 액션 리스너
         loginButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                String username = usernameField.getText();
+                LoginDAO dao = new LoginDAO();
+                String loginId = usernameField.getText();
                 String password = new String(passwordField.getPassword());
-
-                String answer = 다오에서 받아온거;
-
-                if (password.equals(answer)) {
-                    if (1 == 2) {
-                        AdminAccess adminFrame = new AdminAccess();
-                        adminFrame.setVisible(true);
-                        this.dispose();
-                        // rootPaneCheckingEnabled 이걸 추천해주네네
-
-                    } else if (1 == 0) {
-                        GiverMainClass giverMainFrame = new GiverMainClass(인자 전달달
-                        );
-                        giverMainFrame.setVisible(true);
-                        this.dispose();
+                try {
+                    int ID = dao.getUserId(loginId);
+                    if (dao.validateLogin(ID, password)) {
+                        int userType = dao.getUserType(ID);
+                        int userId = dao.getUserId(loginId);
+                        if (userType == 2) {
+                            try {
+                                AdminAccess adminFrame = new AdminAccess();
+                                adminFrame.setVisible(true);
+                                dispose();
+                            } catch (ClassNotFoundException ex) {
+                                messageLabel.setText("Admin frame could not be loaded");
+                                messageLabel.setForeground(Color.RED);
+                            }
+                        } else if (userType == 0) {
+                            try {
+                                GiverMainClass giverMainFrame = new GiverMainClass(userId);
+                                giverMainFrame.setVisible(true);
+                                dispose();
+                            } catch (ClassNotFoundException ex) {
+                                messageLabel.setText("Giver frame could not be loaded");
+                                messageLabel.setForeground(Color.RED);
+                            }
+                        } else {
+                            String userName = dao.getUserName(userId);
+                            RAccept2 acceptMainFrame = new RAccept2(userId, userName);
+                            acceptMainFrame.setVisible(true);
+                            dispose();
+                        }
                     } else {
-                        RAccept2 acceptMainFrame = new RAccept2(인자 전달달
-                        );
-                        acceptMainFrame.setVisible(true);
-                        this.dispose();
+                        messageLabel.setText("Invalid username or password!");
+                        messageLabel.setForeground(Color.RED);
                     }
-
-                } else {
-                    messageLabel.setText("Invalid username or password!");
+                } catch (SQLException ex) {
+                    messageLabel.setText("Database error occurred!");
                     messageLabel.setForeground(Color.RED);
                 }
-
             }
         });
     }

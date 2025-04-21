@@ -38,9 +38,9 @@ public class RAccept2 extends JFrame {
         root.add(sp);
 
         // 4) DB에서 카드 생성 후 화면에 추가
-        try { 
+        try {
             ReceiverHistoryDao dao = new ReceiverHistoryDao();
-            
+
             List<ReceiverHistoryVo> vos = dao.read(receiverId);
 
             List<Temlist2> cards = createCards(vos);
@@ -54,27 +54,31 @@ public class RAccept2 extends JFrame {
         } catch (Exception e) {
             e.printStackTrace();
             JOptionPane.showMessageDialog(this,
-                "DB 오류: " + e.getMessage(),
-                "오류", JOptionPane.ERROR_MESSAGE);
+                    "DB 오류: " + e.getMessage(),
+                    "오류", JOptionPane.ERROR_MESSAGE);
         }
     }
 
-    /** VO 리스트를 Temlist2 카드로 변환 */
+    /**
+     * VO 리스트를 Temlist2 카드로 변환
+     */
     private List<Temlist2> createCards(List<ReceiverHistoryVo> vos) {
         SimpleDateFormat fmt = new SimpleDateFormat("yyyy.MM.dd");
         List<Temlist2> out = new ArrayList<>();
         for (ReceiverHistoryVo v : vos) {
             out.add(new Temlist2(
-                v.getGiverName(),
-                String.format("%,d", v.getAmount()),
-                fmt.format(v.getCreateDate()),
-                v.getMessage()
+                    v.getGiverName(),
+                    String.format("%,d", v.getAmount()),
+                    fmt.format(v.getCreateDate()),
+                    v.getMessage()
             ));
         }
         return out;
     }
 
-    /** 테스트용 main */
+    /**
+     * 테스트용 main
+     */
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
             new RAccept2(2, "김성진").setVisible(true);

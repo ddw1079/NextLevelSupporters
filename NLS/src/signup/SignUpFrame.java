@@ -1,13 +1,9 @@
 package signup;
-/* 
- fdsafdsa
- fdsafdsaf
- accountFieldsaf
- dsafdsafdsa
- */
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.sql.SQLException;
 
 public class SignUpFrame extends JFrame {
 
@@ -20,9 +16,13 @@ public class SignUpFrame extends JFrame {
     private JTextArea reasonArea;
 
     private JButton signUpButton;
-    private JLabel messageLabel; // 이건 뭐하는거임? 
+    private JLabel messageLabel;
+
+    private SignUpDAO signUpDAO;
 
     public SignUpFrame() {
+        signUpDAO = new SignUpDAO();
+
         // 프레임 기본 설정
         setTitle("SignUp Form");
         setSize(1000, 1200);
@@ -34,7 +34,7 @@ public class SignUpFrame extends JFrame {
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(5, 5, 5, 5); // 여백 설정
 
-        // 사용자 아이디디 레이블
+        // 사용자 아이디 레이블
         gbc.gridx = 0;
         gbc.gridy = 0;
         add(new JLabel("Id:"), gbc);
@@ -104,10 +104,10 @@ public class SignUpFrame extends JFrame {
         gbc.gridx = 1;
         gbc.gridy = 5;
         gbc.fill = GridBagConstraints.HORIZONTAL;
-        loginIDField = new JTextField(20);
-        add(loginIDField, gbc);
+        accountField = new JTextField(20);
+        add(accountField, gbc);
 
-        // 로그인 버튼
+        // 회원가입 버튼
         gbc.gridx = 0;
         gbc.gridy = 8;
         gbc.gridwidth = 2;
@@ -130,6 +130,13 @@ public class SignUpFrame extends JFrame {
         reasonArea.setVisible(false);
         add(reasonArea, gbc);
 
+        // 메시지 레이블
+        gbc.gridx = 0;
+        gbc.gridy = 9;
+        gbc.gridwidth = 2;
+        messageLabel = new JLabel("");
+        add(messageLabel, gbc);
+
         // 사유 나타나는 액션 리스너
         userTypeBox.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -144,17 +151,31 @@ public class SignUpFrame extends JFrame {
             }
         });
 
-        // 로그인 버튼 액션 리스너
+        // 회원가입 버튼 액션 리스너
         signUpButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                String username = loginIDField.getText();
-                String password = loginPWField.getText();
+                try {
+                    String loginID = loginIDField.getText();
+                    String loginPW = loginPWField.getText();
+                    String name = nameField.getText();
+                    String phone = phoneField.getText();
+                    String userType = (String) userTypeBox.getSelectedItem();
+                    String account = accountField.getText();
+                    String reason = reasonArea.getText();
 
-                if (username.equals("admin") && password.equals("admin")) {
-                    messageLabel.setText("Login successful!");
-                    messageLabel.setForeground(Color.GREEN);
-                } else {
-                    messageLabel.setText("Invalid username or password!");
+                    int userTypeInt = userType.equals("후원자") ? 0 : 1;  // 0: 후원자, 1: 수혜자
+
+                    boolean success = signUpDAO.registerUser(loginID, loginPW, name, phone, userTypeInt, account, reason);
+                    if (success) {
+                        messageLabel.setText("회원가입 성공!");
+                        messageLabel.setForeground(Color.GREEN);
+                        dispose();  // 회원가입 성공 후 창 닫기
+                    } else {
+                        messageLabel.setText("회원가입 실패. 다시 시도해주세요.");
+                        messageLabel.setForeground(Color.RED);
+                    }
+                } catch (SQLException ex) {
+                    messageLabel.setText("데이터베이스 오류: " + ex.getMessage());
                     messageLabel.setForeground(Color.RED);
                 }
             }
