@@ -257,8 +257,7 @@ public class AdminAccess extends JFrame {
 				int user = 0;
 				String logid ="";
 				if (row != -1 && (column == 0 || column == 2)) {
-					dispose();
-					setVisible(false);
+
 					Object userid = historyTable.getValueAt(row, column);// 선택된 유저 ID를 추출
 					user = Integer.parseInt(userid.toString());// int로 변환
 					Object login_id = historyTable.getValueAt(row, column+1);
@@ -274,8 +273,7 @@ public class AdminAccess extends JFrame {
 						e1.printStackTrace();
 					}
 				}else if (row != -1 && (column == 1 || column == 3)) {
-					dispose();
-					setVisible(false);
+
 					Object userid = historyTable.getValueAt(row, column-1);// 선택된 유저 ID를 추출
 					user = Integer.parseInt(userid.toString());// int로 변환
 					Object login_id = historyTable.getValueAt(row, column);

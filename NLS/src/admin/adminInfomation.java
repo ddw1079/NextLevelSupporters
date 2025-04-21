@@ -84,16 +84,6 @@ public class adminInfomation extends JFrame {
 			public void mouseClicked(MouseEvent e) {
 				dispose();
 				setVisible(false);
-				try {
-					AdminAccess adac = new AdminAccess();
-					adac.setVisible(true);
-				} catch (ClassNotFoundException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				} catch (SQLException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
 				
 			}
 		});
