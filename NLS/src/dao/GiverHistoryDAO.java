@@ -55,7 +55,7 @@ public class GiverHistoryDAO implements Readable{
 		// SQL 문 설명: 후원자 ID 로 검색. 
 		// 자동 증가 idx, 생성일, 후원자 아이디와 이름, 수혜자 아이디와 이름, 후원금액, 후원메시지, 수령받음 char 값이 Y면 1 아니면 0
 		String sql = """
-	            SELECT ROW_NUMBER() OVER (ORDER BY H.GIVER_ID) AS idx,
+	            SELECT ROW_NUMBER() OVER (ORDER BY H.CREATE_DATE ASC) AS idx,
 	                   H.CREATE_DATE,
 	                   H.GIVER_ID,
 	                   G.NAME AS GIVER_NAME,
@@ -68,6 +68,7 @@ public class GiverHistoryDAO implements Readable{
 	            LEFT JOIN user_table G ON H.GIVER_ID = G.ID
 	            LEFT JOIN user_table R ON H.RECEIVER_ID = R.ID
 	            WHERE  H.GIVER_ID = ?
+	            ORDER BY H.CREATE_DATE DESC
 	            """;
 		// SQL문을 PrepareStatement 에 넣고 물음표 부분을 채운다.
 		ps = con.prepareStatement(sql);

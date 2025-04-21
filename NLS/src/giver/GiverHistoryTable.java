@@ -35,7 +35,7 @@ public class GiverHistoryTable extends JPanel {
         GiverHistoryDAO ghdao = new GiverHistoryDAO();
         ArrayList<GiverHistoryVO> ghList = ghdao.read(user_id);
         // 테이블 데이터와 컬럼 이름 설정
-        String[] columnNames = {"ID", "수혜자명", "일자", "금액", "메세지"};
+        String[] columnNames = {"NO.", "수혜자명", "일자", "금액", "메세지"};
 
         // Object[] 타입 데이터 리스트 선언. 
         ArrayList<Object[]> dataList = new ArrayList<>();
@@ -43,10 +43,11 @@ public class GiverHistoryTable extends JPanel {
         // ghList의 값들을 Object[] 타입의 Row에 하나씩 넣고,
         // 그 Row 를 다시 List<Object[]> 에 넣는다.
         // 이때, 사용할 데이터를 선택할 수도 있다.
+        int i = 0;
         for(GiverHistoryVO temp: ghList) {
         	// 여기에 데이터를 넣고싶어...
         	Object[] newRow = {
-        		temp.getIdx(),
+        		++i, // temp.getIdx(),
         		temp.getReceiver_name(),
         		temp.getCreate_date(),
         		temp.getAmount(),
