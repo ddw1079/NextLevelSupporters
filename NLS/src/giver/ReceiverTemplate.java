@@ -31,10 +31,10 @@ public class ReceiverTemplate extends JPanel {
 	 * Output: (클릭한 수혜자의 )수혜자 후원 페이지
 	 */
 	public ReceiverTemplate() {
-		this(1, 2, "굶주리는 준석이", "배고픔에 잠 못 이루는 밤… 작은 도움 하나가 제게 희망이 됩니다.", "010-1111-2222");
+		this(0, 1, 2, "굶주리는 준석이", "배고픔에 잠 못 이루는 밤… 작은 도움 하나가 제게 희망이 됩니다.", "010-1111-2222");
 	}
 	
-	public ReceiverTemplate(int giverID, int receiverID, String receiverName, String receiverReason, String receiverPhone) {
+	public ReceiverTemplate(int index, int giverID, int receiverID, String receiverName, String receiverReason, String receiverPhone) {
 		btnReceiverName = new JButton(receiverName);
 		btnReceiverName.addMouseListener(new MouseAdapter() {
 			@Override
@@ -53,7 +53,7 @@ public class ReceiverTemplate extends JPanel {
 		
 		panel = new JPanel();
 		panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-		panel.setBounds(225, 0, 471, 66);
+		panel.setBounds(225, 0, 663, 66);
 		add(panel);
 		panel.setLayout(new GridLayout(0, 1, 0, 0));
 		
@@ -65,7 +65,7 @@ public class ReceiverTemplate extends JPanel {
 		add(panel_1);
 		panel_1.setLayout(new GridLayout(0, 1, 0, 0));
 		
-		JLabel lblIndexLabel = new JLabel("1");
+		JLabel lblIndexLabel = new JLabel(Integer.toString(index));
 		lblIndexLabel.setFont(new Font("굴림", Font.BOLD, 20));
 		lblIndexLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		panel_1.add(lblIndexLabel);

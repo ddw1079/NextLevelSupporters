@@ -1,5 +1,6 @@
 package giver;
 
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.EventQueue;
@@ -25,6 +26,8 @@ import javax.swing.JTable;
 import java.awt.GridLayout;
 import java.sql.SQLException;
 
+import javax.swing.BorderFactory;
+import javax.swing.Box;
 import javax.swing.BoxLayout;
 
 
@@ -55,7 +58,7 @@ public class GiverMainClass extends JFrame {
 		
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 693, 490);
+		setBounds(100, 100, 843, 500);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 
@@ -63,11 +66,11 @@ public class GiverMainClass extends JFrame {
 		contentPane.setLayout(null);
 		
 		NLSMenuTemplate menuTemplate = new NLSMenuTemplate(user_id);
-		menuTemplate.setBounds(12, 10, 653, 41);
+		menuTemplate.setBounds(12, 10, 800, 41);
 		contentPane.add(menuTemplate);
 		
 		JPanel panel = new JPanel();
-		panel.setBounds(12, 61, 651, 25);
+		panel.setBounds(12, 61, 800, 25);
 		contentPane.add(panel);
 		
 		JLabel lblNewLabel = new JLabel("수혜자 목록");
@@ -77,29 +80,38 @@ public class GiverMainClass extends JFrame {
 		
         // 스크롤 영역 생성 및 패널 연결
         JScrollPane scrollPane = new JScrollPane(panel_1);
-		scrollPane.setBounds(12, 96, 653, 345);
+		scrollPane.setBounds(12, 96, 800, 345);
         contentPane.add(scrollPane);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 		scrollPane.setViewportView(panel_1);
 		scrollPane.getVerticalScrollBar().setUnitIncrement(20); // 숫자를 늘리면 더 빠르게 스크롤
-		panel_1.setLayout(new BoxLayout(panel_1, BoxLayout.Y_AXIS));
 		
+		int index = 0;
 		// for 문 선언할 곳
 		for(GiverMainClassVO temp: gmcList) {
-			panel_1.add( new ReceiverTemplate(
+			ReceiverTemplate rt = new ReceiverTemplate(
+					++index,
 					user_id,
 					temp.getReceiver_id(),
 					temp.getReceiver_name(),
 					temp.getReceiver_reason(),
 					temp.getReceiver_phone()
-					));
+					);
+			rt.setPreferredSize(new Dimension(800, 66));
+			rt.setMaximumSize(new Dimension(800, 66));
+            rt.setAlignmentX(Component.CENTER_ALIGNMENT);
+            
+			panel_1.add(Box.createVerticalStrut(10));
+			panel_1.add(rt);
 		}
 		
 		
-		panel_1.setPreferredSize(new Dimension(653, panel_1.getComponentCount() * 66));
+		panel_1.setPreferredSize(new Dimension(800, panel_1.getComponentCount() * (66 + 10)));
 		panel_1.revalidate();
 		panel_1.repaint();
-
+		System.out.println("Viewport Width After Update: " + scrollPane.getViewport().getWidth());
+		System.out.println("Panel_1 PreferredSize After Update: " + panel_1.getPreferredSize());
+		System.out.println("Component Count: " + panel_1.getComponentCount());
 	}
 	
     /** 테스트용 main */
