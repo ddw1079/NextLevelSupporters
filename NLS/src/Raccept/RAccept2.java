@@ -44,7 +44,7 @@ public class RAccept2 extends JFrame {
         sp.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         root.add(sp, BorderLayout.CENTER);
         // 스크롤 속도 빠르게 설정 (기본보다 높게)
-        sp.getVerticalScrollBar().setUnitIncrement(16);
+        sp.getVerticalScrollBar().setUnitIncrement(16); 
 
         // DB에서 카드 불러오기
         try {
@@ -61,7 +61,7 @@ public class RAccept2 extends JFrame {
                         String.format("%,d", v.getAmount()),
                         fmt.format(v.getCreateDate()),
                         v.getMessage(),
-                        listPanel, // JPanel로 통일
+                        listPanel,                 // JPanel로 통일
                         receiverId,
                         v.getGiverId(),
                         v.getCreateDate()
@@ -85,30 +85,6 @@ public class RAccept2 extends JFrame {
                     "오류", JOptionPane.ERROR_MESSAGE);
         }
     }
-
-    <<<<<<< HEAD
-    /**
-     * VO 리스트를 Temlist2 카드로 변환
-     */
-    private List<Temlist2> createCards(List<ReceiverHistoryVo> vos) {
-        SimpleDateFormat fmt = new SimpleDateFormat("yyyy.MM.dd");
-        List<Temlist2> out = new ArrayList<>();
-        for (ReceiverHistoryVo v : vos) {
-            out.add(new Temlist2(
-                    v.getGiverName(),
-                    String.format("%,d", v.getAmount()),
-                    fmt.format(v.getCreateDate()),
-                    v.getMessage()
-            ));
-        }
-        return out;
-    }
-
-    /**
-     * 테스트용 main
-     */
-    =======
->>>>>>> 09e39d91aaf1bc706872b2c5af2fe38c976a81f0
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
