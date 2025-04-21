@@ -157,8 +157,8 @@ public class ReceiverSponseringMainClass extends JFrame {
 							e1.printStackTrace();
 						}
 						if(isSuccess) {
-							ImageIcon checkIcon = new ImageIcon(getClass().getResource("/IMAGES/check.png"));
-							JOptionPane.showMessageDialog(btnSend, receiverName + " 에게 후원해주셔서 감사드립니다.\n후원 내역은 후원 내역 페이지에서 확인하실 수 있습니다.", "후원에 감사드립니다.", JOptionPane.PLAIN_MESSAGE, checkIcon);
+							// ImageIcon checkIcon = new ImageIcon(getClass().getResource("/IMAGES/check.png"));
+							JOptionPane.showMessageDialog(btnSend, receiverName + " 에게 후원해주셔서 감사드립니다.\n후원 내역은 후원 내역 페이지에서 확인하실 수 있습니다.", "후원에 감사드립니다.", JOptionPane.INFORMATION_MESSAGE);
 							dispose();
 						} else {
 							JOptionPane.showMessageDialog(btnSend, receiverName + "에게 후원하던 중 오류가 발생햇습니다.", "오류 발생", JOptionPane.YES_OPTION);
