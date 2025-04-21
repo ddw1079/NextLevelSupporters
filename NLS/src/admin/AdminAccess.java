@@ -162,10 +162,10 @@ public class AdminAccess extends JFrame {
 		});
 		
 		
-		
+		/*
 		btnActive.setBounds(186, 513, 97, 23);
 		contentPane.add(btnActive);
-
+		
 		btnDeactive = new JButton("Deactive");// 유저 조회 창에서 선택한 유저를 Deactive 하는 버튼
 		btnDeactive.addMouseListener(new MouseAdapter() {
 			@Override
@@ -192,7 +192,7 @@ public class AdminAccess extends JFrame {
 		});
 		btnDeactive.setBounds(547, 513, 97, 23);
 		contentPane.add(btnDeactive);
-
+		*/
 		
 		
 		
@@ -202,6 +202,38 @@ public class AdminAccess extends JFrame {
 
 		// 유저 목록 조회 창
 		userTable = new JTable();
+		userTable.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				try {
+					Object id = userTable.getValueAt(userTable.getSelectedRow(), 0);// 선택한 줄에 해당하는 user의 id를 추출
+					int userid = Integer.parseInt(id.toString());
+					Object is_active = userTable.getValueAt(userTable.getSelectedRow(), 5);
+					String isactive = is_active.toString();
+					if(isactive.equals("Y")){
+						JOptionPane.showMessageDialog(null, "id:" + userid + "번 유저 Deactive");
+						dao.activeUpdate(userid, "N");// 가져온 id 값을 이용해 db에서 해당 user의 isactive 값 변경
+						getUserTable();// 값이 변경된 이후에 다시 테이블을 갱신해서, 변경 여부를 즉시 반영
+					}else {
+						JOptionPane.showMessageDialog(null, "id:" + userid + "번 유저 Active");
+						dao.activeUpdate(userid, "Y");// 가져온 id 값을 이용해 db에서 해당 user의 isactive 값 변경
+						getUserTable();// 값이 변경된 이후에 다시 테이블을 갱신해서, 변경 여부를 즉시 반영
+					}
+					
+				} catch (ArrayIndexOutOfBoundsException e1) {
+					JOptionPane.showMessageDialog(null, "변경할 user가 선택되지 않았습니다.");
+				}catch(IndexOutOfBoundsException e1){
+					JOptionPane.showMessageDialog(null, "변경할 user가 선택되지 않았습니다.");
+				}
+				catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				} catch (ClassNotFoundException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			}
+		});
 		getUserTable();
 		userTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		userScrollPane.setViewportView(userTable);
@@ -359,7 +391,7 @@ public class AdminAccess extends JFrame {
                 return false; // 모든 셀 편집 불가
             }
         };
-
+        
 		for (UserVO row : datafromDB) {// 테이블에 db 값 옮기기
 			Object[] rowData = { row.getId(), row.getLogin_id(), row.getName(), row.getUser_type(), row.getPhone(),
 					row.getIs_active() };
