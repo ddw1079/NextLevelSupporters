@@ -13,7 +13,7 @@ public class RAccept3list extends JFrame {
 
     private JPanel contentPane;
 
-    public RAccept3list(int receiverId, String receiverName) {
+    public RAccept3list(int receiverId, String receiverName) throws ClassNotFoundException, SQLException {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setBounds(100, 100, 706, 477);
 
@@ -28,13 +28,13 @@ public class RAccept3list extends JFrame {
         contentPane.add(lblTitle);
 
         // 상단 메뉴바
-        NLSMenuTemplate menuTemplate = new NLSMenuTemplate(receiverName, 1);
+        NLSMenuTemplate menuTemplate = new NLSMenuTemplate(receiverId);
         menuTemplate.setBounds(0, 0, 690, 42);
         contentPane.add(menuTemplate);
 
         try {
             ReceiverHistoryDao dao = new ReceiverHistoryDao();
-            List<ReceiverHistoryVo> vos = dao.read(receiverId); // 후원 내역 조회
+            List<ReceiverHistoryVo> vos = dao.readByStatus(receiverId, "Y"); // 받은 내역만 조회
 
             Temlist3 tablePanel = new Temlist3(vos);
             tablePanel.setBounds(27, 102, 637, 336);
@@ -48,7 +48,11 @@ public class RAccept3list extends JFrame {
 
     public static void main(String[] args) {
         EventQueue.invokeLater(() -> {
-            new RAccept3list(2, "김성진").setVisible(true); // 예시: 수혜자 ID = 2
+            try {
+                new RAccept3list(2, "김성진").setVisible(true);
+            } catch (ClassNotFoundException | SQLException e) {
+                e.printStackTrace();
+            }
         });
     }
 }

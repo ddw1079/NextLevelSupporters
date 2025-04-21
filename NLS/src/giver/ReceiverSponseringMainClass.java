@@ -5,15 +5,24 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
+import db.ConnectDB;
+
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.sql.Connection;
+import java.sql.Date;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 public class ReceiverSponseringMainClass extends JFrame {
 
@@ -124,16 +133,38 @@ public class ReceiverSponseringMainClass extends JFrame {
 		btnSend.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				String sendMsg = "후원금과 메시지를 " + receiverName + " 에게 송부합니다.";
-				int amount = Integer.parseInt(textFieldAmount.getText());
-				sendMsg += "\n후원 금액: " + amount;
-				String msg = textFieldMsg.getText();
-				sendMsg += "\n응원 메시지: " + msg;
-				sendMsg += "\n\n이렇게 보낼까요?";
-				int result = JOptionPane.showConfirmDialog(btnSend, sendMsg, "응원 메시지를 보내요", JOptionPane.YES_NO_OPTION);
-				if(result == JOptionPane.YES_OPTION) {
-					JOptionPane.showConfirmDialog(btnSend, receiverName + " 에게 후원해주셔서 감사드립니다.\n후원 내역은 후원 내역 페이지에서 확인하실 수 있습니다.", "후원에 감사드립니다.", JOptionPane.YES_OPTION);
-					dispose();
+				if(!textFieldAmount.getText().matches("\\d+")) {
+					JOptionPane.showMessageDialog(btnSend, "후원 금액에는 숫자를 입력해주세요.", "오류 발생", JOptionPane.YES_OPTION);
+				} else if(textFieldMsg.getText().isEmpty() || textFieldAmount.getText().isEmpty()) {
+					JOptionPane.showMessageDialog(btnSend, "후원 메시지와 후원 금액을 입력해주세요.", "오류 발생", JOptionPane.YES_OPTION);
+				} else {
+					String sendMsg = "후원금과 메시지를 " + receiverName + " 에게 송부합니다.";
+					int amount = Integer.parseInt(textFieldAmount.getText());
+					sendMsg += "\n후원 금액: " + amount;
+					String msg = textFieldMsg.getText();
+					sendMsg += "\n응원 메시지: " + msg;
+					sendMsg += "\n\n이렇게 보낼까요?";
+					int result = JOptionPane.showConfirmDialog(btnSend, sendMsg, "응원 메시지를 보내요", JOptionPane.YES_NO_OPTION);
+					boolean isSuccess = false;
+					if(result == JOptionPane.YES_OPTION) {
+						try {
+							isSuccess = new DonationDAO().insertDonationHistory(giverID, receiverID, amount, msg);
+						} catch (SQLException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						} catch (ClassNotFoundException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
+						if(isSuccess) {
+							// ImageIcon checkIcon = new ImageIcon(getClass().getResource("/IMAGES/check.png"));
+							JOptionPane.showMessageDialog(btnSend, receiverName + " 에게 후원해주셔서 감사드립니다.\n후원 내역은 후원 내역 페이지에서 확인하실 수 있습니다.", "후원에 감사드립니다.", JOptionPane.INFORMATION_MESSAGE);
+							dispose();
+						} else {
+							JOptionPane.showMessageDialog(btnSend, receiverName + "에게 후원하던 중 오류가 발생햇습니다.", "오류 발생", JOptionPane.YES_OPTION);
+							dispose();
+						}
+					}
 				}
 			}
 		});
@@ -154,5 +185,93 @@ public class ReceiverSponseringMainClass extends JFrame {
 		});
 		btnCancel.setBounds(251, 294, 201, 99);
 		contentPane.add(btnCancel);
+	}
+}
+
+
+// VO, DAO 객체
+class DonationVO {
+	private int giver_id;
+	private int receiver_id;
+	private int amount;
+	private String message;
+	DonationVO() {}
+	DonationVO(int giver_id, int receiver_id, int amount, String message) {
+		this.setGiver_id(giver_id);
+		this.setReceiver_id(receiver_id);
+		this.setAmount(amount);
+		this.setMessage(message);
+	}
+	public int getGiver_id() {
+		return giver_id;
+	}
+	public void setGiver_id(int giver_id) {
+		this.giver_id = giver_id;
+	}
+	public int getReceiver_id() {
+		return receiver_id;
+	}
+	public void setReceiver_id(int receiver_id) {
+		this.receiver_id = receiver_id;
+	}
+	public int getAmount() {
+		return amount;
+	}
+	public void setAmount(int amount) {
+		this.amount = amount;
+	}
+	public String getMessage() {
+		return message;
+	}
+	public void setMessage(String message) {
+		this.message = message;
+	}
+	
+}
+
+class DonationDAO {
+	private Connection con;
+	PreparedStatement ps = null;
+	ResultSet rs = null;
+	DonationDAO() throws ClassNotFoundException, SQLException {
+		con = new ConnectDB().getConnection();
+	}
+	
+	public boolean insertDonationHistory(
+			int giver_id, 
+			int receiver_id, 
+			int amount, 
+			String message
+			) 
+					throws SQLException {
+		try {
+			String sql = """
+					INSERT	INTO HISTORY (
+							CREATE_DATE, 
+							GIVER_ID, 
+							RECEIVER_ID, 
+							AMOUNT, 
+							MESSAGE, 
+							IS_RECEIVED
+					)
+					VALUES (SYSDATE, ?, ?, ?, ?, ?)
+					""";
+			
+			ps = con.prepareStatement(sql);
+			ps.setInt(1, giver_id);
+			ps.setInt(2, receiver_id);
+			ps.setInt(3, amount);
+			ps.setString(4, message);
+			ps.setString(5, "N");
+			
+			int resultRow = ps.executeUpdate();
+			System.out.println(resultRow + " Rows inserted");
+			
+		} catch(SQLException e) {
+			System.out.println("SQL Exception Error");
+			return false;
+		}
+		
+		return true;
 	}
 }

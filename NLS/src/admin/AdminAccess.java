@@ -149,6 +149,8 @@ public class AdminAccess extends JFrame {
 					getUserTable();// 값이 변경된 이후에 다시 테이블을 갱신해서, 변경 여부를 즉시 반영
 				} catch (ArrayIndexOutOfBoundsException e1) {
 					JOptionPane.showMessageDialog(null, "변경할 user가 선택되지 않았습니다.");
+				}catch(IndexOutOfBoundsException e1){
+					JOptionPane.showMessageDialog(null, "변경할 user가 선택되지 않았습니다.");
 				} catch (SQLException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
@@ -164,19 +166,22 @@ public class AdminAccess extends JFrame {
 		btnActive.setBounds(186, 513, 97, 23);
 		contentPane.add(btnActive);
 
-		btnDeactive = new JButton("Deactive");// 유저 조회 창에서 선택한 유저를 Dactive 하는 버튼
+		btnDeactive = new JButton("Deactive");// 유저 조회 창에서 선택한 유저를 Deactive 하는 버튼
 		btnDeactive.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				try {
 					Object id = userTable.getValueAt(userTable.getSelectedRow(), 0);// 선택한 줄에 해당하는 user의 id를 추출
 					int userid = Integer.parseInt(id.toString());
-					JOptionPane.showMessageDialog(null, "id:" + userid + "번 유저 Dactive");
+					JOptionPane.showMessageDialog(null, "id:" + userid + "번 유저 Deactive");
 					dao.activeUpdate(userid, "N");// 가져온 id 값을 이용해 db에서 해당 user의 isactive 값 변경
 					getUserTable();// 값이 변경된 이후에 다시 테이블을 갱신해서, 변경 여부를 즉시 반영
 				} catch (ArrayIndexOutOfBoundsException e1) {
 					JOptionPane.showMessageDialog(null, "변경할 user가 선택되지 않았습니다.");
-				} catch (SQLException e1) {
+				}catch(IndexOutOfBoundsException e1){
+					JOptionPane.showMessageDialog(null, "변경할 user가 선택되지 않았습니다.");
+				}
+				catch (SQLException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				} catch (ClassNotFoundException e1) {
@@ -247,7 +252,12 @@ public class AdminAccess extends JFrame {
 
 		List<HistoryVO> datafromDB = dao.historyRead(); // DB에서 데이터 읽기
 		String[] columnNames = { "후원자", "수혜자", "금액", "일자", "수혜 여부" };// 테이블에 출력될 컬럼명
-		DefaultTableModel model = new DefaultTableModel(columnNames, 0);
+		DefaultTableModel model = new DefaultTableModel(columnNames, 0){
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false; // 모든 셀 편집 불가
+            }
+        };
 
 		for (HistoryVO row : datafromDB) {// 테이블에 db 값 옮기기
 			Object[] rowData = { row.getGiver_id(), row.getReceiver_id(), row.getAmount(), row.getDate(),
@@ -293,11 +303,25 @@ public class AdminAccess extends JFrame {
 				}
 			}
 		});
-
+		
+		//로그아웃 버튼,누르면 현재 창을 종료하고, 로그인 창으로 이동
+		/*
 		txtSearch.setBounds(77, 144, 660, 21);
 		contentPane.add(txtSearch);
 		txtSearch.setColumns(10);
-
+		
+		JButton btnLogout = new JButton("로그아웃");
+		btnLogout.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				dispose();
+				setVisible(false);
+				new LoginFrame().setVisible(true);
+			}
+		});
+		btnLogout.setBounds(677, 27, 97, 23);
+		contentPane.add(btnLogout);
+		*/
 	}
 	
 	
@@ -310,7 +334,12 @@ public class AdminAccess extends JFrame {
 		List<UserVO> datafromDB = dao.read(); // DB에서 데이터 읽기
 
 		String[] columnNames = { "ID", "LOGIN_ID", "이름", "타입", "전화번호", "IS_ACTIVE" };// 테이블에 출력될 컬럼명
-		DefaultTableModel model = new DefaultTableModel(columnNames, 0);
+		DefaultTableModel model = new DefaultTableModel(columnNames, 0){
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false; // 모든 셀 편집 불가
+            }
+        };
 
 		for (UserVO row : datafromDB) {// 테이블에 db 값 옮기기
 			Object[] rowData = { row.getId(), row.getLogin_id(), row.getName(), row.getUser_type(), row.getPhone(),
@@ -320,5 +349,4 @@ public class AdminAccess extends JFrame {
 
 		userTable.setModel(model);// 테이블에 위에 작성한 사항 적용
 	}
-
 }
