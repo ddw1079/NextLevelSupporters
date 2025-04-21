@@ -66,7 +66,7 @@ public class GiverHistoryMainClass extends JFrame {
 		menuTemplate.setBounds(12, 10, 938, 41);
 		contentPane.add(menuTemplate);
 		
-		GiverHistoryTable giverHistoryTable = new GiverHistoryTable();
+		GiverHistoryTable giverHistoryTable = new GiverHistoryTable(user_id);
 		giverHistoryTable.setBounds(48, 112, 873, 335);
 		contentPane.add(giverHistoryTable);
 		

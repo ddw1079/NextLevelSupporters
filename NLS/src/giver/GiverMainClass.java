@@ -109,9 +109,9 @@ public class GiverMainClass extends JFrame {
 		panel_1.setPreferredSize(new Dimension(800, panel_1.getComponentCount() * (66 + 10)));
 		panel_1.revalidate();
 		panel_1.repaint();
-		System.out.println("Viewport Width After Update: " + scrollPane.getViewport().getWidth());
-		System.out.println("Panel_1 PreferredSize After Update: " + panel_1.getPreferredSize());
-		System.out.println("Component Count: " + panel_1.getComponentCount());
+//		System.out.println("Viewport Width After Update: " + scrollPane.getViewport().getWidth());
+//		System.out.println("Panel_1 PreferredSize After Update: " + panel_1.getPreferredSize());
+//		System.out.println("Component Count: " + panel_1.getComponentCount());
 	}
 	
     /** 테스트용 main */
