@@ -1,6 +1,9 @@
 package signup;
 
 import javax.swing.*;
+
+import login.LoginFrame;
+
 import java.awt.*;
 import java.awt.event.*;
 import java.sql.SQLException;
@@ -169,11 +172,13 @@ public class SignUpFrame extends JFrame {
                     if (success) {
                         messageLabel.setText("회원가입 성공!");
                         messageLabel.setForeground(Color.GREEN);
+                        LoginFrame loginFrame = new LoginFrame();
+                        loginFrame.setVisible(true);
                         dispose();  // 회원가입 성공 후 창 닫기
                     } else {
                         messageLabel.setText("회원가입 실패. 다시 시도해주세요.");
                         messageLabel.setForeground(Color.RED);
-                    }
+                    } 
                 } catch (SQLException ex) {
                     messageLabel.setText("데이터베이스 오류: " + ex.getMessage());
                     messageLabel.setForeground(Color.RED);
