@@ -221,37 +221,56 @@ public class AdminAccess extends JFrame {
 			public void mouseClicked(MouseEvent e) {// 상세정보 출력 이벤트
 				int row = historyTable.rowAtPoint(e.getPoint());
 				int column = historyTable.columnAtPoint(e.getPoint());
-				if (row != -1 && (column == 0 || column == 1)) {// 후원자,수혜자 칸 클릭시에만 반응
+				int user = 0;
+				String information = null;
+				if (row != -1 && (column == 0 || column == 2)) {// 후원자,수혜자 칸 클릭시에만 반응
 
 					Object userid = historyTable.getValueAt(row, column);// 선택된 유저 ID를 추출
-					int user = Integer.parseInt(userid.toString());// int로 변환
-					String information = "user id:" + user + " 의 후원/수혜 내역\n";
-					try {
-						List<HistoryVO> hislist = dao.read(user);
-						for (HistoryVO his : hislist) {
-							int giverid = his.getGiver_id();
-							int receiveid = his.getReceiver_id();
-							int amount = his.getAmount();
-							Date date = his.getDate();
-							String isreceived = his.getIs_received();
-							String onehistory = "후원자 id:" + giverid + "    수혜자 id:" + receiveid + "    금액:" + amount
-									+ "    일자:" + date + "    수혜 여부:" + isreceived + "\n";
-							information += onehistory;
-						}
-						JOptionPane.showMessageDialog(null, information);
-
-					} catch (SQLException e1) {
-						e1.printStackTrace();
-						JOptionPane.showMessageDialog(null, "오류 발생");
-					}
+					user = Integer.parseInt(userid.toString());// int로 변환
+					Object login_id = historyTable.getValueAt(row, column+1);
+					String logid = login_id.toString();
+					information = logid + " 의 후원/수혜 내역\n";
+					
 					// JOptionPane.showMessageDialog(null, user+"의 상세정보");//동작 테스트용 코드
 
+				}else if (row != -1 && (column == 1 || column == 3)) {
+					Object userid = null;
+					if (column == 1) {
+					userid = historyTable.getValueAt(row, 0);
+					}else if(column == 3) {
+					userid = historyTable.getValueAt(row, 2);
+					}
+					user = Integer.parseInt(userid.toString());// int로 변환
+					Object login_id = historyTable.getValueAt(row, column);
+					String logid = login_id.toString();
+					information = logid + " 의 후원/수혜 내역\n";
+				}
+				
+				try {
+					List<HistoryVO> hislist = dao.read(user);
+					for (HistoryVO his : hislist) {
+						int giverid = his.getGiver_id();
+						int receiveid = his.getReceiver_id();
+						int amount = his.getAmount();
+						Date date = his.getDate();
+						String isreceived = his.getIs_received();
+						String onehistory = "후원자 id:" + giverid + "    수혜자 id:" + receiveid + "    금액:" + amount
+								+ "    일자:" + date + "    수혜 여부:" + isreceived + "\n";
+						information += onehistory;
+					}
+					if(column >= 0 && column <=3) {
+					JOptionPane.showMessageDialog(null, information);
+					}
+					
+				} catch (SQLException e1) {
+					e1.printStackTrace();
+					JOptionPane.showMessageDialog(null, "오류 발생");
 				}
 			}
 		});
 
 		List<HistoryVO> datafromDB = dao.historyRead(); // DB에서 데이터 읽기
-		String[] columnNames = { "후원자", "수혜자", "금액", "일자", "수혜 여부" };// 테이블에 출력될 컬럼명
+		String[] columnNames = { "후원자 번호","후원자 아이디" ,"수혜자 번호","수혜자 아이디", "금액", "일자", "수혜 여부" };// 테이블에 출력될 컬럼명
 		DefaultTableModel model = new DefaultTableModel(columnNames, 0){
             @Override
             public boolean isCellEditable(int row, int column) {
@@ -260,7 +279,7 @@ public class AdminAccess extends JFrame {
         };
 
 		for (HistoryVO row : datafromDB) {// 테이블에 db 값 옮기기
-			Object[] rowData = { row.getGiver_id(), row.getReceiver_id(), row.getAmount(), row.getDate(),
+			Object[] rowData = { row.getGiver_id(),row.getGiver_logid(), row.getReceiver_id(),row.getReceiver_logid() ,row.getAmount(), row.getDate(),
 					row.getIs_received() };
 			model.addRow(rowData);
 		}

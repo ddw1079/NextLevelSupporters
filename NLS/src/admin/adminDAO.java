@@ -11,7 +11,9 @@ import java.util.List;
 public class adminDAO implements Readable{
 	private Connection con;
 	PreparedStatement pstmt=null;
+	PreparedStatement pstmt2=null;
 	ResultSet rs=null;
+	ResultSet rs2=null;
 	
 	public adminDAO() throws ClassNotFoundException, SQLException {
 		con = new ConnectDB().getConnection();
@@ -39,29 +41,67 @@ public class adminDAO implements Readable{
 		if(usertype == 0) {//선택한 user가 후원자일 경우
 			String sql2 = "select * from history where giver_id = ? ORDER BY CREATE_DATE";
 			pstmt = con.prepareStatement(sql2);
+			String sql4 = "select * from user_table where id = ? ";
+			pstmt2 = con.prepareStatement(sql4);
+			
 			pstmt.setInt(1, id);
 			rs = pstmt.executeQuery();
 			while(rs.next()) {
-				int gid = rs.getInt("giver_id");		
+				int gid = rs.getInt("giver_id");
 				int rid = rs.getInt("receiver_id");
+				
+			    String glogid = "";
+			    pstmt2.setInt(1, gid);
+			    ResultSet rs2 = pstmt2.executeQuery();
+			    if (rs2.next()) {
+			        glogid = rs2.getString("login_id");
+			    }
+			    rs2.close();
+
+			    String rlogid = "";
+			    pstmt2.setInt(1, rid);
+			    rs2 = pstmt2.executeQuery();
+			    if (rs2.next()) {
+			        rlogid = rs2.getString("login_id");
+			    }
+			    rs2.close();
 				int amount = rs.getInt("amount");
 				Date d = rs.getDate("CREATE_DATE");
 				String b = rs.getString("is_received");
-				HistoryVO hv = new HistoryVO(gid,rid,amount,d,b);
+				HistoryVO hv = new HistoryVO(gid,glogid,rid,rlogid,amount,d,b);
 				hisarray.add(hv);
 			}
 		}else if(usertype == 1) {//선택한 user가 수혜자일 경우
 			String sql3 = "select * from history where receiver_id = ? ORDER BY CREATE_DATE";
 			pstmt = con.prepareStatement(sql3);
+			String sql4 = "select * from user_table where id = ? ";
+			pstmt2 = con.prepareStatement(sql4);
+			
 			pstmt.setInt(1, id);
 			rs = pstmt.executeQuery();
 			while(rs.next()) {
-				int gid = rs.getInt("giver_id");		
+				int gid = rs.getInt("giver_id");
 				int rid = rs.getInt("receiver_id");
+				
+			    String glogid = "";
+			    pstmt2.setInt(1, gid);
+			    ResultSet rs2 = pstmt2.executeQuery();
+			    if (rs2.next()) {
+			        glogid = rs2.getString("login_id");
+			    }
+			    rs2.close();
+
+			    String rlogid = "";
+			    pstmt2.setInt(1, rid);
+			    rs2 = pstmt2.executeQuery();
+			    if (rs2.next()) {
+			        rlogid = rs2.getString("login_id");
+			    }
+			    rs2.close();	
 				int amount = rs.getInt("amount");
 				Date d = rs.getDate("CREATE_DATE");
 				String b = rs.getString("is_received");
-				HistoryVO hv = new HistoryVO(gid,rid,amount,d,b);
+				HistoryVO hv = new HistoryVO(gid,glogid,rid,rlogid,amount,d,b);
 				hisarray.add(hv);
 			}
 		}
@@ -98,13 +138,29 @@ public class adminDAO implements Readable{
 		String sql = "select * from history";
 		pstmt = con.prepareStatement(sql);
 		rs = pstmt.executeQuery();
+		
 		while(rs.next()) {
 			int giver_id = rs.getInt("giver_id");
+			String giver_logid = "";
+			
+			String sql2 = "select * from user_table where id = ?";
+			pstmt2 = con.prepareStatement(sql2);
+			pstmt2.setInt(1, giver_id);
+			rs2 = pstmt2.executeQuery();
+			if(rs2.next()) {
+			giver_logid = rs2.getString("login_id");
+			}rs2.close();
 			int receiver_id = rs.getInt("receiver_id");
+			String receiver_logid = "";
+			pstmt2.setInt(1, receiver_id);
+			rs2 = pstmt2.executeQuery();
+			if(rs2.next()) {
+			receiver_logid = rs2.getString("login_id");
+			}
 			int amount = rs.getInt("amount");
 			Date date = rs.getDate("CREATE_DATE");
 			String is_received = rs.getString("is_received");
-			HistoryVO hv = new HistoryVO(giver_id, receiver_id, amount, date, is_received);
+			HistoryVO hv = new HistoryVO(giver_id,giver_logid ,receiver_id, receiver_logid, amount, date, is_received);
 			hisarray.add(hv);
 		}
 		return hisarray;
