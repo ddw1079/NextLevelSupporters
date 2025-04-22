@@ -11,7 +11,7 @@ import java.util.List;
 public class RAccept2 extends JFrame {
 
     public RAccept2(int receiverId, String receiverName) throws ClassNotFoundException, SQLException {
-        setTitle("받기 전 후원내역");
+        setTitle("후원금확인페이지");
         setSize(706, 477);
         setLocationRelativeTo(null); // 화면 중앙 정렬
         setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -28,9 +28,13 @@ public class RAccept2 extends JFrame {
         menu.setBounds(0, 0, 690, 42);
         topPanel.add(menu);
 
-        JLabel lblTitle = new JLabel("받기 전 후원내역");
-        lblTitle.setFont(new Font("나눔고딕 ExtraBold", Font.BOLD, 23));
-        lblTitle.setBounds(10, 60, 300, 30);
+        //후원내역상단레벨
+        JLabel lblTitle = new JLabel(
+        	    "<html>" + receiverName + "님,<br>누군가의 따뜻한 마음이 도착했습니다</html>"
+        	);
+        	lblTitle.setFont(new Font("나눔고딕 ExtraBold", Font.BOLD, 18));
+
+        lblTitle.setBounds(10, 50, 600, 42); // 너비 넉넉히 설정
         topPanel.add(lblTitle);
 
         root.add(topPanel, BorderLayout.NORTH);
@@ -38,7 +42,7 @@ public class RAccept2 extends JFrame {
         // 카드 리스트 패널 (JPanel로 변경 )
         JPanel listPanel = new JPanel();
         listPanel.setLayout(new BoxLayout(listPanel, BoxLayout.Y_AXIS));
-        listPanel.setBackground(SystemColor.info);
+        listPanel.setBackground(new Color(255, 255, 240));
 
         JScrollPane sp = new JScrollPane(listPanel);
         sp.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
