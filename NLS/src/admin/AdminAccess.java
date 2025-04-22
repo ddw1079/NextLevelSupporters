@@ -89,7 +89,7 @@ public class AdminAccess extends JFrame {
 		setBounds(100, 100, 856, 616);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-
+		
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 
@@ -136,7 +136,7 @@ public class AdminAccess extends JFrame {
 
 		
 		
-		
+		/*
 		btnActive = new JButton("Active");// 유저 조회 창에서 선택한 유저를 Active 하는 버튼
 		btnActive.addMouseListener(new MouseAdapter() {
 			@Override
@@ -162,7 +162,7 @@ public class AdminAccess extends JFrame {
 		});
 		
 		
-		/*
+		
 		btnActive.setBounds(186, 513, 97, 23);
 		contentPane.add(btnActive);
 		
@@ -256,7 +256,7 @@ public class AdminAccess extends JFrame {
 				int column = historyTable.columnAtPoint(e.getPoint());
 				int user = 0;
 				String logid ="";
-				if (row != -1 && (column == 0 || column == 2)) {
+				if (row != -1 && (column == 0 || column == 2)) {//id칸 클릭
 
 					Object userid = historyTable.getValueAt(row, column);// 선택된 유저 ID를 추출
 					user = Integer.parseInt(userid.toString());// int로 변환
@@ -272,7 +272,7 @@ public class AdminAccess extends JFrame {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
 					}
-				}else if (row != -1 && (column == 1 || column == 3)) {
+				}else if (row != -1 && (column == 1 || column == 3)) {//login id 칸 클릭
 
 					Object userid = historyTable.getValueAt(row, column-1);// 선택된 유저 ID를 추출
 					user = Integer.parseInt(userid.toString());// int로 변환
@@ -290,57 +290,9 @@ public class AdminAccess extends JFrame {
 					}
 				}
 
-				/*
-				int row = historyTable.rowAtPoint(e.getPoint());
-				int column = historyTable.columnAtPoint(e.getPoint());
-				int user = 0;
-				String information = null;
-				if (row != -1 && (column == 0 || column == 2)) {// 후원자,수혜자 칸 클릭시에만 반응
-
-					Object userid = historyTable.getValueAt(row, column);// 선택된 유저 ID를 추출
-					user = Integer.parseInt(userid.toString());// int로 변환
-					Object login_id = historyTable.getValueAt(row, column+1);
-					String logid = login_id.toString();
-					information = logid + " 의 후원/수혜 내역\n";
-					
-					// JOptionPane.showMessageDialog(null, user+"의 상세정보");//동작 테스트용 코드
-
-				}else if (row != -1 && (column == 1 || column == 3)) {
-					Object userid = null;
-					if (column == 1) {
-					userid = historyTable.getValueAt(row, 0);
-					}else if(column == 3) {
-					userid = historyTable.getValueAt(row, 2);
-					}
-					user = Integer.parseInt(userid.toString());// int로 변환
-					Object login_id = historyTable.getValueAt(row, column);
-					String logid = login_id.toString();
-					information = logid + " 의 후원/수혜 내역\n";
-				}
-				
-				try {
-					List<HistoryVO> hislist = dao.read(user);
-					for (HistoryVO his : hislist) {
-						int giverid = his.getGiver_id();
-						int receiveid = his.getReceiver_id();
-						int amount = his.getAmount();
-						Date date = his.getDate();
-						String isreceived = his.getIs_received();
-						String onehistory = "후원자 id:" + giverid + "    수혜자 id:" + receiveid + "    금액:" + amount
-								+ "    일자:" + date + "    수혜 여부:" + isreceived + "\n";
-						information += onehistory;
-					}
-					if(column >= 0 && column <=3) {
-					JOptionPane.showMessageDialog(null, information);
-					}
-					
-				} catch (SQLException e1) {
-					e1.printStackTrace();
-					JOptionPane.showMessageDialog(null, "오류 발생");
-				}*/
 			}
 		});
-
+			
 		List<HistoryVO> datafromDB = dao.historyRead(); // DB에서 데이터 읽기
 		String[] columnNames = { "후원자 번호","후원자 아이디" ,"수혜자 번호","수혜자 아이디", "금액", "일자", "수혜 여부" };// 테이블에 출력될 컬럼명
 		DefaultTableModel model = new DefaultTableModel(columnNames, 0){
@@ -349,7 +301,7 @@ public class AdminAccess extends JFrame {
                 return false; // 모든 셀 편집 불가
             }
         };
-
+        	
 		for (HistoryVO row : datafromDB) {// 테이블에 db 값 옮기기
 			Object[] rowData = { row.getGiver_id(),row.getGiver_logid(), row.getReceiver_id(),row.getReceiver_logid() ,row.getAmount(), row.getDate(),
 					row.getIs_received() };
@@ -360,7 +312,7 @@ public class AdminAccess extends JFrame {
 		historyTable.setVisible(false);// 시작 화면이 유저 조회 창 이므로 내역 창 비활성화
 
 		historyScrollPane.setViewportView(historyTable);
-
+			
 		
 		
 		
@@ -394,25 +346,9 @@ public class AdminAccess extends JFrame {
 				}
 			}
 		});
-		
-		//로그아웃 버튼,누르면 현재 창을 종료하고, 로그인 창으로 이동
-		/*
-		txtSearch.setBounds(77, 144, 660, 21);
+		txtSearch.setBounds(77, 141, 660, 25); // 위치와 크기 지정
 		contentPane.add(txtSearch);
-		txtSearch.setColumns(10);
 		
-		JButton btnLogout = new JButton("로그아웃");
-		btnLogout.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				dispose();
-				setVisible(false);
-				new LoginFrame().setVisible(true);
-			}
-		});
-		btnLogout.setBounds(677, 27, 97, 23);
-		contentPane.add(btnLogout);
-		*/
 	}
 	
 	
@@ -437,7 +373,7 @@ public class AdminAccess extends JFrame {
 					row.getIs_active() };
 			model.addRow(rowData);
 		}
-
+		
 		userTable.setModel(model);// 테이블에 위에 작성한 사항 적용
 	}
 }
