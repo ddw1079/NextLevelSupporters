@@ -19,8 +19,12 @@ import java.awt.GridBagLayout;
 import java.util.List;
 
 import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
+import javax.swing.table.TableModel;
+import javax.swing.table.TableRowSorter;
 
 import Raccept.ReceiverHistoryVo;
 
@@ -69,6 +73,46 @@ public class Temlist3 extends JPanel {
     // 테이블에 스크롤 추가
         JScrollPane scrollPane = new JScrollPane(table);
         add(scrollPane, BorderLayout.CENTER);
+        
+        JPanel panel = new JPanel();
+        add(panel, BorderLayout.NORTH);
+        panel.setLayout(new BorderLayout(0, 0));
+        
+        // 검색 기능 구현
+        JTextField textSearch = new JTextField();
+        TableRowSorter<TableModel> historySorter = new TableRowSorter<>(model);
+        table.setRowSorter(historySorter);
+        
+        textSearch.getDocument().addDocumentListener(new DocumentListener() {// 검색 기능
+			public void insertUpdate(DocumentEvent e) {
+				filterTable(); // 텍스트가 변경될 때마다 필터링
+			}
+
+			public void removeUpdate(DocumentEvent e) {
+				filterTable(); // 텍스트가 변경될 때마다 필터링
+			}
+
+			public void changedUpdate(DocumentEvent e) {
+				filterTable(); // 텍스트가 변경될 때마다 필터링
+			}
+
+			// 필터링 메서드
+			private void filterTable() {
+				String searchText = textSearch.getText().toLowerCase(); // 검색 텍스트 소문자로 변환
+				if (searchText.trim().length() == 0) {
+					historySorter.setRowFilter(null); // 입력이 없으면 필터를 해제
+				} else {
+					historySorter.setRowFilter(RowFilter.regexFilter("(?i)" + searchText)); // 필터링
+				}
+			}
+		});
+        
+        
+        panel.add(textSearch, BorderLayout.CENTER);
+        textSearch.setColumns(10);
+        
+        JLabel lblNewLabel = new JLabel(" 테이블 검색: ");
+        panel.add(lblNewLabel, BorderLayout.WEST);
     }
 
     // 버튼 렌더러
