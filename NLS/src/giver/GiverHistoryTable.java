@@ -9,13 +9,22 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
+import javax.swing.table.TableModel;
+import javax.swing.table.TableRowSorter;
+
 
 import dao.GiverHistoryDAO;
 import vo.GiverHistoryVO;
+import javax.swing.JLabel;
+import javax.swing.JTextField;
+import javax.swing.RowFilter;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 
 public class GiverHistoryTable extends JPanel {
 
 	private static final long serialVersionUID = 1L;
+	private JTextField textSearch;
 
 	/**
 	 * 파일 설명: 후원자의 후원 내역 테이블
@@ -90,6 +99,46 @@ public class GiverHistoryTable extends JPanel {
 
         // JScrollPane을 패널에 추가
         add(scrollPane, BorderLayout.CENTER);
+        
+        JPanel panel = new JPanel();
+        add(panel, BorderLayout.NORTH);
+        panel.setLayout(new BorderLayout(0, 0));
+        
+        // 검색 기능 구현
+        textSearch = new JTextField();
+        TableRowSorter<TableModel> historySorter = new TableRowSorter<>(model);
+        table.setRowSorter(historySorter);
+        
+        textSearch.getDocument().addDocumentListener(new DocumentListener() {// 검색 기능
+			public void insertUpdate(DocumentEvent e) {
+				filterTable(); // 텍스트가 변경될 때마다 필터링
+			}
+
+			public void removeUpdate(DocumentEvent e) {
+				filterTable(); // 텍스트가 변경될 때마다 필터링
+			}
+
+			public void changedUpdate(DocumentEvent e) {
+				filterTable(); // 텍스트가 변경될 때마다 필터링
+			}
+
+			// 필터링 메서드
+			private void filterTable() {
+				String searchText = textSearch.getText().toLowerCase(); // 검색 텍스트 소문자로 변환
+				if (searchText.trim().length() == 0) {
+					historySorter.setRowFilter(null); // 입력이 없으면 필터를 해제
+				} else {
+					historySorter.setRowFilter(RowFilter.regexFilter("(?i)" + searchText)); // 필터링
+				}
+			}
+		});
+        
+        
+        panel.add(textSearch, BorderLayout.CENTER);
+        textSearch.setColumns(10);
+        
+        JLabel lblNewLabel = new JLabel(" 테이블 검색: ");
+        panel.add(lblNewLabel, BorderLayout.WEST);
 
         // 테이블의 열 너비 변경을 적용한 후 새로 고침
         table.getTableHeader().repaint(); // 헤더 새로 고침

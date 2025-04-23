@@ -49,7 +49,7 @@ public class GiverHistoryMainClass extends JFrame {
 	public GiverHistoryMainClass(int user_id) throws ClassNotFoundException, SQLException {
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 978, 507);
+		setBounds(100, 100, 978, 550);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 
@@ -67,7 +67,7 @@ public class GiverHistoryMainClass extends JFrame {
 		contentPane.add(menuTemplate);
 		
 		GiverHistoryTable giverHistoryTable = new GiverHistoryTable(user_id);
-		giverHistoryTable.setBounds(48, 112, 873, 335);
+		giverHistoryTable.setBounds(49, 166, 873, 335);
 		contentPane.add(giverHistoryTable);
 		
 		
